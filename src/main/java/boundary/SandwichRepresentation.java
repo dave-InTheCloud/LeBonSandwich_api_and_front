@@ -16,7 +16,7 @@ import javax.ws.rs.core.Response;
 @Stateless
 public class SandwichRepresentation {
 
-	 @GET
+	 @GET 
 	 @Path("/")
 	 public	String sayHello(){
 			return "hello wolrd";
