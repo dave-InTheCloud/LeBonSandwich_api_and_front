@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @XmlRootElement
@@ -14,19 +17,22 @@ public class Sandwich {
 	private String id;
 	private String size;
 	private String typeBread;
-	private List<String>ingredients;
+	@ManyToOne
+	@JsonBackReference
+	private List<Ingredient>ingredients;
 	
 	
 	public Sandwich(){
 		
 	}
 	
-	public Sandwich(String size, String typeBread, List<String> ingredients) {
+	public Sandwich(String size, String typeBread, List<Ingredient> ingredients) {
 		super();
 		this.size = size;
 		this.typeBread = typeBread;
 		this.ingredients = ingredients;
 	}
+	
 	public String getSize() {
 		return size;
 	}
@@ -39,10 +45,10 @@ public class Sandwich {
 	public void setTypeBread(String typeBread) {
 		this.typeBread = typeBread;
 	}
-	public List<String> getIngredients() {
+	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
-	public void setIngredients(List<String> ingredients) {
+	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
 	
