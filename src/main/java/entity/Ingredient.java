@@ -3,6 +3,7 @@ package entity;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,6 +15,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 public class Ingredient implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Id 
+	private String id;
 	private String name;
 	@ManyToOne
 	@JsonBackReference
@@ -31,15 +34,17 @@ public class Ingredient implements Serializable{
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public Category getCategory() {
 		return category;
 	}
+	
 	public void setCategory(Category category) {
 		this.category = category;
 	}
-	
 	
 }

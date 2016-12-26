@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -22,8 +23,10 @@ public class Sandwich implements Serializable  {
     
 	@Id 
 	private String id;
-	private String size;
-	private String typeBread;
+	
+	@OneToOne
+	@JsonManagedReference
+	private Bread bread;
 	
 	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
 	@JsonManagedReference
@@ -34,27 +37,23 @@ public class Sandwich implements Serializable  {
 		
 	}
 	
-	public Sandwich(String size, String typeBread, List<Ingredient> ingredients) {
-		this.size = size;
-		this.typeBread = typeBread;
+	public Sandwich(Bread Bread, List<Ingredient> ingredients) {
+		this.bread = Bread;
 		this.ingredients = ingredients;
 	}
 	
-	public String getSize() {
-		return size;
+	public Bread getTypeBread() {
+		return bread;
 	}
-	public void setSize(String size) {
-		this.size = size;
+	
+	public void setTypeBread(Bread typeBread) {
+		this.bread = typeBread;
 	}
-	public String getTypeBread() {
-		return typeBread;
-	}
-	public void setTypeBread(String typeBread) {
-		this.typeBread = typeBread;
-	}
+	
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
+	
 	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
