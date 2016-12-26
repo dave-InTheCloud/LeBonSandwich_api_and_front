@@ -14,13 +14,13 @@ public class Ingredient {
 	private String name;
 	@ManyToOne
 	@JsonBackReference
-	private String category;
+	private Category category;
 	
 	public Ingredient(){
 		
 	}
 	
-	public Ingredient(String name, String category) {
+	public Ingredient(String name, Category category) {
 		this.name = name;
 		this.category = category;
 	}
@@ -31,10 +31,10 @@ public class Ingredient {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getCategory() {
+	public Category getCategory() {
 		return category;
 	}
-	public void setCategory(String category) {
+	public void setCategory(Category category) {
 		this.category = category;
 	}
 	
