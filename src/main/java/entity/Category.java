@@ -1,12 +1,25 @@
 package entity;
 
+import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @XmlRootElement
-public class Category {
+public class Category implements Serializable {
+	private static final long serialVersionUID = 1L;
+
 	private String name;
+	
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "category")
+	@JsonManagedReference
+	private List<Ingredient>ingredients;
 	
 	public Category(){
 		

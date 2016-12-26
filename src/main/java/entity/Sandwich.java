@@ -1,24 +1,32 @@
 package entity;
 
+import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @XmlRootElement
-public class Sandwich {
-		
+public class Sandwich implements Serializable  {
+    private static final long serialVersionUID = 1L;
+    
+    
 	@Id 
 	private String id;
 	private String size;
 	private String typeBread;
-	@ManyToOne
-	@JsonBackReference
+	
+	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
+	@JsonManagedReference
 	private List<Ingredient>ingredients;
 	
 	
@@ -27,7 +35,6 @@ public class Sandwich {
 	}
 	
 	public Sandwich(String size, String typeBread, List<Ingredient> ingredients) {
-		super();
 		this.size = size;
 		this.typeBread = typeBread;
 		this.ingredients = ingredients;
