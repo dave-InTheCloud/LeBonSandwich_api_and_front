@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -20,7 +21,7 @@ public class Category implements Serializable {
 	private String id;
 	private String name;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "name")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "name")
 	@JsonManagedReference
 	private List<Ingredient>ingredients;
 	
@@ -28,19 +29,31 @@ public class Category implements Serializable {
 		
 	}
 	
-	public Category(String name) {
+
+	public Category(String name, List<Ingredient> ingredients) {
 		this.name = name;
+		this.ingredients = ingredients;
 	}
-
-
 
 	public String getName() {
 		return name;
 	}
 
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
+
+	public List<Ingredient> getIngredients() {
+		return ingredients;
+	}
+
+
+	public void setIngredients(List<Ingredient> ingredients) {
+		this.ingredients = ingredients;
+	}
+
 	
 	
 }

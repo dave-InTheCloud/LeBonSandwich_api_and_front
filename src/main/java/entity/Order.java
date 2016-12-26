@@ -1,13 +1,17 @@
 package entity;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -19,7 +23,9 @@ public class Order implements Serializable{
 	
 	@Id 
 	private String id;
-	private Date createdAt;
+	
+    @Temporal(TemporalType.TIMESTAMP)
+	private java.util.Date createdAt;
 	private Boolean payed=false;
 	private Boolean finished = false;
 	
@@ -33,11 +39,7 @@ public class Order implements Serializable{
 		
 	}
 	
-	public Order(String id, Date createdAt, Boolean payed, Boolean finished, List<Sandwich> sandwichs) {
-		this.id = id;
-		this.createdAt = createdAt;
-		this.payed = payed;
-		this.finished = finished;
+	public Order(List<Sandwich> sandwichs) {
 		this.sandwichs = sandwichs;
 	}
 
