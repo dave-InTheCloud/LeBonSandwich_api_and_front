@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
+import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -30,6 +31,16 @@ public class CategoryRessource {
 		// pour éviter les pbs de cache
 		q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
 		return q.getResultList();
+	}
+	
+	public void delete(String id){
+		  try {
+			  Category ref = this.em.getReference(Category.class, id);
+	            this.em.remove(ref);
+	        } catch (EntityNotFoundException e) {
+	            // on veut supprimer, et elle n'existe pas, donc c'est bon
+	        }
+		
 	}
 
 }
