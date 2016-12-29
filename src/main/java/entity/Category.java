@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -27,7 +28,7 @@ public class Category implements Serializable {
 	private String id;
 	private String name;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "name")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private List<Ingredient>ingredients;
 	

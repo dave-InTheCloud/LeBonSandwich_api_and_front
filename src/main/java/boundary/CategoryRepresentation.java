@@ -36,7 +36,7 @@ public class CategoryRepresentation {
 	 @POST
 	 @Path("/{name}")
 	    public Response addIngredient(@PathParam("name") String name, @Context UriInfo uriInfo) {
-		 Category c = this.categoryResource.save(new Category(name, new ArrayList<>()));
+		 Category c = this.categoryResource.save(new Category(name, new ArrayList<Ingredient>()));
 	        URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
 	        return Response.created(uri)
 	                .entity(c)

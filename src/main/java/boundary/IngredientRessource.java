@@ -1,10 +1,16 @@
 package boundary;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Stateless;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.ws.rs.core.GenericEntity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 
 import entity.Category;
 import entity.Ingredient;
@@ -15,20 +21,23 @@ public class IngredientRessource {
 	
 	@PersistenceContext
     EntityManager em;
-    
-	  public Ingredient addIngredient(Ingredient ing) {
-		  Ingredient res = new Ingredient(ing.getName(), ing.getCategory());
-	      res.setId(UUID.randomUUID().toString());
-	     
-	      this.em.persist(res);
-	      return res;
-	    }
-
-	 public Ingredient save(Ingredient ing) {
-		ing.setId(UUID.randomUUID().toString());
-		ing.setName("");
-		ing.setCategory(new Category());
-        return this.em.merge(ing);
+ 
+	 public Ingredient save(Ingredient ing, String idCateg) {
+		Category c = this.em.find(Category.class, idCateg);
+		Ingredient i = new Ingredient(ing.getName(), c) ;
+		i.setId(UUID.randomUUID().toString());
+        return this.em.merge(i);
     }
+	 
+	 public Ingredient findById(String id) {
+	    return this.em.find(Ingredient.class, id);
+	 }
+	 
+	 public List<Ingredient> findAll() {
+			Query q = this.em.createNamedQuery("Ingredient.findAll", Ingredient.class);
+			// pour éviter les pbs de cache
+			q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+			return q.getResultList();
+		}
 
 }
