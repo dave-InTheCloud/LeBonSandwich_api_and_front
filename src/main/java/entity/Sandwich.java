@@ -1,6 +1,7 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -28,16 +29,16 @@ public class Sandwich implements Serializable  {
 	@JsonManagedReference
 	private Bread bread;
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
+	
 	@JsonManagedReference
-	private List<Ingredient>ingredients;
+	private ArrayList<Ingredient>ingredients;
 	
 	
 	public Sandwich(){
 		
 	}
 	
-	public Sandwich(Bread Bread, List<Ingredient> ingredients) {
+	public Sandwich(Bread Bread, ArrayList<Ingredient> ingredients) {
 		this.bread = Bread;
 		this.ingredients = ingredients;
 	}
@@ -50,11 +51,11 @@ public class Sandwich implements Serializable  {
 		this.bread = typeBread;
 	}
 	
-	public List<Ingredient> getIngredients() {
+	public ArrayList<Ingredient> getIngredients() {
 		return ingredients;
 	}
 	
-	public void setIngredients(List<Ingredient> ingredients) {
+	public void setIngredients(ArrayList<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
 	

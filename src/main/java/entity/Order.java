@@ -1,8 +1,9 @@
 package entity;
-
+/*
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,16 +31,16 @@ public class Order implements Serializable{
 	private Boolean finished = false;
 	
 	
-	@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
+	// @ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
 	@JsonManagedReference
-	private List<Sandwich>sandwichs;
+	private ArrayList<Sandwich>sandwichs;
 
 
 	public Order(){
 		
 	}
 	
-	public Order(List<Sandwich> sandwichs) {
+	public Order(ArrayList<Sandwich> sandwichs) {
 		this.sandwichs = sandwichs;
 	}
 
@@ -89,7 +90,7 @@ public class Order implements Serializable{
 	}
 
 
-	public void setSandwichs(List<Sandwich> sandwichs) {
+	public void setSandwichs(ArrayList<Sandwich> sandwichs) {
 		this.sandwichs = sandwichs;
 	}
 
@@ -104,3 +105,4 @@ public class Order implements Serializable{
 	
 
 }
+*/

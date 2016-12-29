@@ -54,6 +54,16 @@ public class Category implements Serializable {
 		this.ingredients = ingredients;
 	}
 
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+
+	public String getId() {
+		return this.id;
+	}
+
 	
 	
 }
