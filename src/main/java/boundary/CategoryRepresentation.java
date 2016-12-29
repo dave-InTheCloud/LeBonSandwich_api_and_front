@@ -3,6 +3,7 @@ package boundary;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -14,6 +15,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -39,6 +41,15 @@ public class CategoryRepresentation {
 	                .entity(c)
 	                .build();
 	    }
-	 
-	 
+	  
+	
+	 @GET
+	 public Response findAll(@Context UriInfo uriInfo){
+		 List<Category> l  = this.categoryResource.findAll();
+		  
+		 GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
+		 
+		 return Response.ok(list, MediaType.APPLICATION_JSON).build();
+		 
+	 }
 }

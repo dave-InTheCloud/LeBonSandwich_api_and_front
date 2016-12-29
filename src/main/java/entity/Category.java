@@ -1,12 +1,15 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -14,6 +17,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Category.findAll", query = "SELECT c FROM Category c")
+})
 public class Category implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -32,7 +38,7 @@ public class Category implements Serializable {
 
 	public Category(String name, List<Ingredient> ingredients) {
 		this.name = name;
-		this.ingredients = ingredients;
+		this.ingredients = new ArrayList<Ingredient>();
 	}
 
 	public String getName() {
