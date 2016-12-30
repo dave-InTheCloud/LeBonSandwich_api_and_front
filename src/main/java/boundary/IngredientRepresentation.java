@@ -29,6 +29,8 @@ public class IngredientRepresentation {
 	
 	@EJB
     private IngredientRessource ingredientResource;
+	@EJB
+	private CategoryRessource categoryRessource;
 	
 	 @POST
 	 @Path("/{idcateg}/{name}")
@@ -48,5 +50,12 @@ public class IngredientRepresentation {
 		 
 		 return Response.ok(list, MediaType.APPLICATION_JSON).build();
 		 
+	 }
+	 
+	 @GET
+	 @Path("/{idCateg}")
+	 public Response findAllByCateg(@Context UriInfo uriInfo){
+	     
+		 return null;	 
 	 }
 }

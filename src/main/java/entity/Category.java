@@ -32,6 +32,7 @@ public class Category implements Serializable {
 	@JsonManagedReference
 	private List<Ingredient>ingredients;
 	
+	
 	public Category(){
 		
 	}

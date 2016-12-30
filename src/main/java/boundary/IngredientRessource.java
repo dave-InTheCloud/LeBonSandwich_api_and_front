@@ -1,5 +1,6 @@
 package boundary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +25,14 @@ public class IngredientRessource {
  
 	 public Ingredient save(Ingredient ing, String idCateg) {
 		Category c = this.em.find(Category.class, idCateg);
+
+		//cancel the save if ingredient already exist in this category
+		for(Ingredient contains : c.getIngredients() ){
+			if(contains.getName().equals(ing.getName())){
+				return contains;
+			}
+		}
+		
 		Ingredient i = new Ingredient(ing.getName(), c) ;
 		i.setId(UUID.randomUUID().toString());
         return this.em.merge(i);
@@ -39,5 +48,12 @@ public class IngredientRessource {
 			q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
 			return q.getResultList();
 		}
+	 
+	 public List<Ingredient> findAllByCateg(){
+		 Query q = this.em.createNamedQuery("Ingredient.findByCateg", Ingredient.class);
+			// pour éviter les pbs de cache
+			q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+			return q.getResultList();
+	 }
 
 }
