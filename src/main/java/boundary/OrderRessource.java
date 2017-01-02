@@ -1,15 +1,13 @@
 package boundary;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import javax.ejb.Stateless;
+import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 import entity.OrderSandwich;
 import entity.Sandwich;
@@ -25,6 +23,14 @@ public class OrderRessource {
 		OrderSandwich order = new OrderSandwich();
 		order.setId(UUID.randomUUID().toString());
 		
-		return order;
+		return this.em.merge(order);
 	}
+	
+	public List<OrderSandwich> findAll() {
+		Query q = this.em.createNamedQuery("OrderSandwich.findAll", OrderSandwich.class);
+		// pour éviter les pbs de cache
+		q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+		return q.getResultList();
+	}
+	
 }

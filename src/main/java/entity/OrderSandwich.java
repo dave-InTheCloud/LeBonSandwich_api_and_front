@@ -7,6 +7,8 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -14,6 +16,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "OrderSandwich.findAll", query = "SELECT s FROM OrderSandwich s")
+})
 public class OrderSandwich implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +27,7 @@ public class OrderSandwich implements Serializable{
 	
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "createdAt", nullable = false)
-	private java.util.Date createdAt = new Date();;
+	private java.util.Date createdAt = new Date();
 	private Boolean payed=false;
 	private Boolean finished = false;
 	
