@@ -19,7 +19,7 @@ public class CategoryRessource {
 	EntityManager em;
 
 	public Category save(Category categ) {
-
+		
 		Category c = new Category();
 		c.setId(UUID.randomUUID().toString());
 		c.setName(categ.getName());
@@ -42,5 +42,6 @@ public class CategoryRessource {
 	        }
 		
 	}
+	
 
 }
