@@ -35,7 +35,7 @@ public class IngredientRepresentation {
 	 @POST
 	 @Path("/{idcateg}/{name}")
 	    public Response addIngredient(@PathParam("idcateg") String categ, @PathParam("name") String name, @Context UriInfo uriInfo) {
-		 Ingredient i = this.ingredientResource.save(new Ingredient(name),categ);
+		 Ingredient i = this.ingredientResource.save(name,categ);
 	        URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
 	        return Response.created(uri)
 	                .entity(i)

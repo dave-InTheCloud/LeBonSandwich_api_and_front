@@ -1,5 +1,6 @@
 package boundary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import entity.Category;
+import entity.Ingredient;
 
 @Stateless // gestion transactionelle (plusieurs users en m�me temps)
 public class CategoryRessource {
@@ -18,11 +20,10 @@ public class CategoryRessource {
 	@PersistenceContext
 	EntityManager em;
 
-	public Category save(Category categ) {
+	public Category save(String name) {
 		
-		Category c = new Category();
+		Category c = new Category(name, new ArrayList<Ingredient>());
 		c.setId(UUID.randomUUID().toString());
-		c.setName(categ.getName());
 		return this.em.merge(c);
 	}
 
