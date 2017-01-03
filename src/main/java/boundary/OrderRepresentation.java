@@ -23,8 +23,7 @@ import entity.OrderSandwich;
 
 
 @Path("/order")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
+
 @Stateless
 public class OrderRepresentation {
 	
@@ -32,8 +31,9 @@ public class OrderRepresentation {
     private OrderRessource orderRessource;
 	
 	 @POST
+	 @Consumes(MediaType.APPLICATION_JSON)
 	   public Response addOrder(@Context UriInfo uriInfo) {
-		 OrderSandwich o = this.orderRessource.save(new OrderSandwich());
+		 OrderSandwich o = this.orderRessource.save();
 	        URI uri = uriInfo.getAbsolutePathBuilder().path(o.getId()).build();
 	        return Response.created(uri)
 	                .entity(o)
@@ -41,6 +41,7 @@ public class OrderRepresentation {
 	    }
 	 
 	 @GET
+	 @Produces(MediaType.APPLICATION_JSON)
 	 public Response findAll(@Context UriInfo uriInfo){
 		 List<OrderSandwich> l  = this.orderRessource.findAll();
 		  
