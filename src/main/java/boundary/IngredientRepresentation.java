@@ -22,7 +22,6 @@ import entity.Category;
 import entity.Ingredient;
 
 @Path("/ingredient")
-@Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class IngredientRepresentation {
@@ -43,6 +42,7 @@ public class IngredientRepresentation {
 	    }
 	 
 	 @GET
+	 @Produces(MediaType.APPLICATION_JSON)
 	 public Response findAll(@Context UriInfo uriInfo){
 		 List<Ingredient> l  = this.ingredientResource.findAll();
 		  
@@ -54,6 +54,7 @@ public class IngredientRepresentation {
 	 
 	 @GET
 	 @Path("/{idCateg}")
+	 @Produces(MediaType.APPLICATION_JSON)
 	 public Response findAllByCateg(@Context UriInfo uriInfo){
 	     
 		 return null;	 

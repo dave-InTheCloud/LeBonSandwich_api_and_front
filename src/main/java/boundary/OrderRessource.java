@@ -19,7 +19,7 @@ public class OrderRessource {
 	EntityManager em;
 	
 	
-	public OrderSandwich save(OrderSandwich o){
+	public OrderSandwich save(){
 		OrderSandwich order = new OrderSandwich();
 		order.setId(UUID.randomUUID().toString());
 		
