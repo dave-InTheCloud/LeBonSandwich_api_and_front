@@ -12,7 +12,7 @@ import javax.persistence.Query;
 
 import entity.Category;
 
-@Stateless // gestion transactionelle (plusieurs users en même temps)
+@Stateless // gestion transactionelle (plusieurs users en mï¿½me temps)
 public class CategoryRessource {
 
 	@PersistenceContext
