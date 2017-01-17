@@ -50,9 +50,6 @@ public class BreadRessource {
         
         //creation
         Response postReponse = this.target.request(MediaType.APPLICATION_JSON).post(Entity.json(jsonCreate));
-        
-        
-
         assertThat(postReponse.getStatus(),is(201));
         
       
@@ -64,6 +61,8 @@ public class BreadRessource {
         JsonObject getReponse = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         assertTrue(getReponse.getString("name").contains("test"));
         
+        String IdToDelete=getReponse.getString("id");
+        
         //find all
         Response findAllReponse = this.target.request(MediaType.APPLICATION_JSON).get();
         assertThat(findAllReponse.getStatus(),is(200));
@@ -71,7 +70,7 @@ public class BreadRessource {
         assertFalse(all.isEmpty());
         
         //delete
-         Response deleteReponse = this.target.path("1").request(MediaType.APPLICATION_JSON).delete();
+         Response deleteReponse = this.target.path(IdToDelete).request(MediaType.APPLICATION_JSON).delete();
         assertThat(deleteReponse.getStatus(),is(204));
         
     }

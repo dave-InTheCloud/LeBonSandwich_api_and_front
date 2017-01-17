@@ -51,12 +51,12 @@ public class BreadRessource {
         
 
          public void delete(String id){
-        try{
-            Bread ins = this.em.getReference(Bread.class,id);
-            this.em.remove(ins);
-        }catch (EntityExistsException ex){
-            System.out.println("The object doesn't exist");
-        }
+            try{
+                Bread ins = this.em.getReference(Bread.class,id);
+                this.em.remove(ins);
+            }catch (EntityExistsException ex){
+                System.out.println("The object doesn't exist");
+            }
 
     }
     
