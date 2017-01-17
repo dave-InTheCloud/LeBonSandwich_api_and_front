@@ -19,7 +19,7 @@ public class SandwichRepresentation {
 	 @GET 
 	 @Path("/")
 	 public	String sayHello(){
-			return "hello wolrd";
+			return "hello world";
 		 
 	 }
 }

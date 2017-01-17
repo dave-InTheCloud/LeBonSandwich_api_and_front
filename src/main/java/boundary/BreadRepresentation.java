@@ -42,7 +42,16 @@ public class BreadRepresentation {
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
         Bread b = this.breadResource.save(bread.getName(),bread.getSize());
         URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
+        System.out.println("Enregistrement du post Bread");
 	return Response.created(uri).entity(b).build();
+    }
+    
+    
+    @GET
+    @Path("{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Bread find(@PathParam("id") String id){
+        return this.breadResource.findById(id);
     }
     
 
@@ -52,5 +61,13 @@ public class BreadRepresentation {
         GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
+    
+     @DELETE
+    @Path("{id}")
+    public void delete(@PathParam("id") String id){
+        this.breadResource.delete(id);
+    }
+    
+    
        
 }
