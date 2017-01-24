@@ -9,17 +9,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import entity.Category;
 import entity.CategoryBindIngredient;
 import entity.Ingredient;
 
@@ -45,7 +44,7 @@ public class IngredientRepresentation {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findAll(@Context UriInfo uriInfo) {
+	public Response findAll() {
 		List<Ingredient> l = this.ingredientResource.findAll();
 
 		GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {
@@ -58,7 +57,7 @@ public class IngredientRepresentation {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
+	public Response findById(@PathParam("id") String id) {
 		Ingredient i = this.ingredientResource.findById(id);
 
 		return Response.ok(i, MediaType.APPLICATION_JSON).build();
@@ -68,6 +67,15 @@ public class IngredientRepresentation {
 	@Path("/{id}")
 	public void delete(@PathParam("id") String id) {
 		this.ingredientResource.delete(id);
+	}
+
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient c) {
+		Ingredient i = this.ingredientResource.update(id, c);
+
+		return Response.ok(i, MediaType.APPLICATION_JSON).build();
 	}
 
 }

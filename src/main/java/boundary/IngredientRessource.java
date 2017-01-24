@@ -1,6 +1,5 @@
 package boundary;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -10,9 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
 import entity.Category;
 import entity.CategoryBindIngredient;
@@ -56,6 +52,20 @@ public class IngredientRessource {
 			this.em.remove(ref);
 		} catch (EntityNotFoundException e) {
 			// on veut supprimer, et elle n'existe pas, donc c'est bon
+		}
+	}
+
+	public Ingredient update(String id, CategoryBindIngredient c) {
+		try {
+			Ingredient ref = this.em.getReference(Ingredient.class, id);
+			Category categ = this.em.find(Category.class, c.getIdCateg());
+			ref.setCategory(categ);
+			ref.setName(c.getNameIng());
+			return ref;
+
+		} catch (EntityNotFoundException e) {
+
+			return null;
 		}
 	}
 
