@@ -20,9 +20,8 @@ public class CategoryRessource {
 	@PersistenceContext
 	EntityManager em;
 
-	public Category save(String name) {
-		
-		Category c = new Category(name, new ArrayList<Ingredient>());
+	public Category save(Category categ) {
+		Category c = new Category(categ.getName(), new ArrayList<Ingredient>());
 		c.setId(UUID.randomUUID().toString());
 		return this.em.merge(c);
 	}
@@ -42,6 +41,10 @@ public class CategoryRessource {
 	            // on veut supprimer, et elle n'existe pas, donc c'est bon
 	        }
 		
+	}
+	
+	public Category findById(String id){
+		  return this.em.find(Category.class, id);
 	}
 	
 

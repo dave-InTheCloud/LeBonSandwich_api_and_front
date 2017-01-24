@@ -6,6 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,44 +20,54 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import entity.Category;
+import entity.CategoryBindIngredient;
 import entity.Ingredient;
 
 @Path("/ingredient")
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class IngredientRepresentation {
-	
+
 	@EJB
-    private IngredientRessource ingredientResource;
+	private IngredientRessource ingredientResource;
 	@EJB
 	private CategoryRessource categoryRessource;
-	
-	 @POST
-	 @Path("/{idcateg}/{name}")
-	    public Response addIngredient(@PathParam("idcateg") String categ, @PathParam("name") String name, @Context UriInfo uriInfo) {
-		 Ingredient i = this.ingredientResource.save(name,categ);
-	        URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
-	        return Response.created(uri)
-	                .entity(i)
-	                .build();
-	    }
-	 
-	 @GET
-	 @Produces(MediaType.APPLICATION_JSON)
-	 public Response findAll(@Context UriInfo uriInfo){
-		 List<Ingredient> l  = this.ingredientResource.findAll();
-		  
-		 GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {};
-		 
-		 return Response.ok(list, MediaType.APPLICATION_JSON).build();
-		 
-	 }
-	 
-	 @GET
-	 @Path("/{idCateg}")
-	 @Produces(MediaType.APPLICATION_JSON)
-	 public Response findAllByCateg(@Context UriInfo uriInfo){
-	     
-		 return null;	 
-	 }
+
+	@POST
+	@Path("/")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addIngredient(CategoryBindIngredient c, @Context UriInfo uriInfo) {
+		Ingredient i = this.ingredientResource.save(c);
+		URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
+		return Response.created(uri).entity(i).build();
+
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findAll(@Context UriInfo uriInfo) {
+		List<Ingredient> l = this.ingredientResource.findAll();
+
+		GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {
+		};
+
+		return Response.ok(list, MediaType.APPLICATION_JSON).build();
+
+	}
+
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
+		Ingredient i = this.ingredientResource.findById(id);
+
+		return Response.ok(i, MediaType.APPLICATION_JSON).build();
+	}
+
+	@DELETE
+	@Path("/{id}")
+	public void delete(@PathParam("id") String id) {
+		this.ingredientResource.delete(id);
+	}
+
 }

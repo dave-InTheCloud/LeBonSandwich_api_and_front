@@ -29,35 +29,42 @@ import entity.Ingredient;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class CategoryRepresentation {
-	
+
 	@EJB
-    private CategoryRessource categoryResource;
-	
-	 @POST
-	 @Path("/{name}")
-	    public Response addCategory(@PathParam("name") String name, @Context UriInfo uriInfo) {
-		 Category c = this.categoryResource.save(name);
-	        URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
-	        return Response.created(uri)
-	                .entity(c)
-	                .build();
-	    }
-	 
-	
-	 @GET
-	 public Response findAll(@Context UriInfo uriInfo){
-		 List<Category> l  = this.categoryResource.findAll();
-		  
-		 GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
-		 
-		 return Response.ok(list, MediaType.APPLICATION_JSON).build();
-		 
-	 }
-	 
-	 @DELETE
-	 @Path("/{categId}")
-	 public void deleteCategory(@PathParam("categId") String id) {
-	        this.categoryResource.delete(id);
-	 }
-	
+	private CategoryRessource categoryResource;
+
+	@POST
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response addCategory(Category categ, @Context UriInfo uriInfo) {
+		Category c = this.categoryResource.save(categ);
+		URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
+		return Response.created(uri).entity(c).build();
+	}
+
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findAll(@Context UriInfo uriInfo) {
+		List<Category> l = this.categoryResource.findAll();
+
+		GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {
+		};
+
+		return Response.ok(list, MediaType.APPLICATION_JSON).build();
+
+	}
+
+	@GET
+	@Path("/{id}")
+	public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
+		Category  c = this.categoryResource.findById(id);
+		
+		return Response.ok(c, MediaType.APPLICATION_JSON).build();
+	}
+
+	@DELETE
+	@Path("/{categId}")
+	public void deleteCategory(@PathParam("categId") String id) {
+		this.categoryResource.delete(id);
+	}
+
 }
