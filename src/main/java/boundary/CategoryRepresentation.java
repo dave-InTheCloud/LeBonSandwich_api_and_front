@@ -61,10 +61,10 @@ public class CategoryRepresentation {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        List<Category> l = this.categoryResource.findAll();    
+        List<Category> l = this.categoryResource.findAll();
         GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
         
-        return Response.ok(list, MediaType.APPLICATION_JSON).build();  
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
     /**
@@ -104,5 +104,5 @@ public class CategoryRepresentation {
         Category c = this.categoryResource.update(categId ,categ);
         
         return c;
-    }  
+    }
 }

@@ -33,7 +33,7 @@ public class BreadRepresentation {
      * Ressource des pains
      */
     @EJB
-    private BreadRessource breadResource; 
+    private BreadRessource breadResource;
     
     /**
      * Methode permettant d'ajouter un nouveau pain (methode HTTP: POST)
@@ -48,7 +48,8 @@ public class BreadRepresentation {
         URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
         
         System.out.println("[POST]Enregistrement d'un nouveau Pain");
-	return Response.created(uri).entity(b).build();
+        
+        return Response.created(uri).entity(b).build();
     }
     
     /**
@@ -84,7 +85,4 @@ public class BreadRepresentation {
     public void delete(@PathParam("id") String id){
         this.breadResource.delete(id);
     }
-    
-    
-       
 }
