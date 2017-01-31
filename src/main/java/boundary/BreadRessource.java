@@ -13,17 +13,22 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
- *
- * @author maxime
+ * Ressource des pains
  */
 @Stateless
 public class BreadRessource {
-    
-    
+        /**
+         * EntityManager
+         */
     	@PersistenceContext
 	EntityManager em;
 
-        
+        /**
+         * Methode permettant d'enregistrer un pain
+         * @param name nom du pain a enregistrer
+         * @param size taille du pain a enregistrer
+         * @return pain enregistre
+         */
         public Bread save(String name, String size){
             Bread b = new Bread();
             
@@ -33,7 +38,12 @@ public class BreadRessource {
            return this.em.merge(b);
         }
         
-         public Bread findById(String id){
+        /**
+         * Methode permettant d'obtenir un pain a partir de son identificateur
+         * @param id identificateur du pain
+         * @return pain correspondant a l'identificateur
+         */
+        public Bread findById(String id){
              Bread res = null;
              try{
                  res = this.em.find(Bread.class,id);
@@ -43,14 +53,21 @@ public class BreadRessource {
              return res;
         }
         
+        /**
+         * Methode permettant d'obtenir la liste de tous les pains
+         * @return liste des pains
+         */
         public List<Bread> findAll(){
             Query q = this.em.createNamedQuery("Bread.findAll",Bread.class);
             q.setHint("javax.persistence.cache.storeMode",CacheStoreMode.REFRESH);
             return q.getResultList();    
         }
         
-
-         public void delete(String id){
+        /**
+         * Methode permettant de supprimer un pain
+         * @param id identificateur du pain a supprimer
+         */
+        public void delete(String id){
             try{
                 Bread ins = this.em.getReference(Bread.class,id);
                 this.em.remove(ins);
