@@ -25,54 +25,84 @@ import javax.ws.rs.core.UriInfo;
 import entity.Category;
 import entity.Ingredient;
 
-@Path("/category")
+/**
+ * Representation d'une Categorie d'Ingredient
+ */
+@Path("/categories")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Stateless 
+@Stateless
 public class CategoryRepresentation {
-   
-	@EJB 
-	private CategoryRessource categoryResource;
-
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addCategory(Category categ, @Context UriInfo uriInfo) {
-		Category c = this.categoryResource.save(categ);
-		URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
-		return Response.created(uri).entity(c).build();
-	} 
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response findAll() {
-		List<Category> l = this.categoryResource.findAll();
-
-		GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
-
-		return Response.ok(list, MediaType.APPLICATION_JSON).build();
-
-	}
-
-	@GET
-	@Path("/{id}")
-	public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
-		Category  c = this.categoryResource.findById(id);
-		
-		return Response.ok(c, MediaType.APPLICATION_JSON).build();
-	}
-
-	@DELETE
-	@Path("/{categId}")
-	public void deleteCategory(@PathParam("categId") String id) {
-		this.categoryResource.delete(id);
-	}
-	
-	@PUT
-	@Path("/{categId}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Category update(@PathParam("categId") String categId, Category categ){
-		Category c = this.categoryResource.update(categId ,categ);
-	return c;
-	}
-
+    /**
+     * Ressource des categories
+     */
+    @EJB
+    private CategoryRessource categoryResource;
+    
+    /**
+     * Methode permettant d'ajouter une categorie d'ingredient
+     * @param categ categorie d'ingredient a ajouter
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addCategory(Category categ, @Context UriInfo uriInfo) {
+        Category c = this.categoryResource.save(categ);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
+        
+        return Response.created(uri).entity(c).build();
+    }
+    
+    /**
+     * Methode permettant de recuperer toutes les categories d'ingredients
+     * @return reponse HTTP comportant la liste des categories
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findAll() {
+        List<Category> l = this.categoryResource.findAll();    
+        GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
+        
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();  
+    }
+    
+    /**
+     * Methode permettant de recuperer une categorie d'ingredient definie par son identificateur
+     * @param id identificateur de la categorie d'ingredient
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP comportant la categorie d'ingredient
+     */
+    @GET
+    @Path("/{id}")
+    public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
+        Category  c = this.categoryResource.findById(id);
+        
+        return Response.ok(c, MediaType.APPLICATION_JSON).build();
+    }
+    
+    /**
+     * Methode permettant de supprimer une categorie d'ingredients
+     * @param id identificateur de la categorie a supprimer
+     */
+    @DELETE
+    @Path("/{categId}")
+    public void deleteCategory(@PathParam("categId") String id) {
+        this.categoryResource.delete(id);
+    }
+    
+    /**
+     * Methode permettant de mettre a jour une categorie d'ingredients
+     * @param categId identificateur de la categorie
+     * @param categ categorie modifiee
+     * @return Reponse HTTP - ca devrait etre une reponse HTTP
+     */
+    @PUT
+    @Path("/{categId}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Category update(@PathParam("categId") String categId, Category categ){
+        Category c = this.categoryResource.update(categId ,categ);
+        
+        return c;
+    }  
 }
