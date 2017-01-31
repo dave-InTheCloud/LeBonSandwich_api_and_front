@@ -1,5 +1,6 @@
 package boundary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +12,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import entity.Category;
+import entity.Ingredient;
 
 @Stateless // gestion transactionelle (plusieurs users en m�me temps)
 public class CategoryRessource {
@@ -19,10 +21,8 @@ public class CategoryRessource {
 	EntityManager em;
 
 	public Category save(Category categ) {
-		
-		Category c = new Category();
+		Category c = new Category(categ.getName(), new ArrayList<Ingredient>());
 		c.setId(UUID.randomUUID().toString());
-		c.setName(categ.getName());
 		return this.em.merge(c);
 	}
 
@@ -41,6 +41,20 @@ public class CategoryRessource {
 	            // on veut supprimer, et elle n'existe pas, donc c'est bon
 	        }
 		
+	}
+	
+	public Category findById(String id){
+		  return this.em.find(Category.class, id);
+	}
+
+	public void update(String id,Category categ) {
+		 try {
+			  Category ref = this.em.getReference(Category.class, id);
+	            this.em.remove(ref);
+	        } catch (EntityNotFoundException e) {
+	            // on veut supprimer, et elle n'existe pas, donc c'est bon
+	        	
+	        }
 	}
 	
 
