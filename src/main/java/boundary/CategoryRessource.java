@@ -32,33 +32,32 @@ public class CategoryRessource {
 		q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
 		return q.getResultList();
 	}
-	
-	public void delete(String id){
-		  try {
-			  Category ref = this.em.getReference(Category.class, id);
-	            this.em.remove(ref);
-	        } catch (EntityNotFoundException e) {
-	        	e.printStackTrace();
-	        }
-		
-	}
-	
-	public Category findById(String id){
-		  return this.em.find(Category.class, id);
+
+	public void delete(String id) {
+		try {
+			Category ref = this.em.getReference(Category.class, id);
+			this.em.remove(ref);
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
+		}
+
 	}
 
-	public Category update(String id,Category categ) {
-		 try {
-			  Category ref = this.em.getReference(Category.class, id);
-				ref.setName(categ.getName());
-				ref.setIngredients(categ.getIngredients());
-				return ref; 
-	        } catch (EntityNotFoundException e) {
-	        	e.printStackTrace();
-	        	return null;
-	        }
-	
+	public Category findById(String id) {
+		return this.em.find(Category.class, id);
 	}
-	
+
+	public Category update(String id, Category categ) {
+		try {
+			Category ref = this.em.getReference(Category.class, id);
+			ref.setName(categ.getName());
+			ref.setIngredients(categ.getIngredients());
+			return ref;
+		} catch (EntityNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+
+	}
 
 }

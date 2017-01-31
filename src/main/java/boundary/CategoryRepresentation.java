@@ -28,10 +28,10 @@ import entity.Ingredient;
 @Path("/category")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
-@Stateless
+@Stateless 
 public class CategoryRepresentation {
-
-	@EJB
+   
+	@EJB 
 	private CategoryRessource categoryResource;
 
 	@POST
@@ -40,15 +40,14 @@ public class CategoryRepresentation {
 		Category c = this.categoryResource.save(categ);
 		URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
 		return Response.created(uri).entity(c).build();
-	}
+	} 
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response findAll() {
 		List<Category> l = this.categoryResource.findAll();
 
-		GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {
-		};
+		GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {};
 
 		return Response.ok(list, MediaType.APPLICATION_JSON).build();
 
@@ -67,6 +66,7 @@ public class CategoryRepresentation {
 	public void deleteCategory(@PathParam("categId") String id) {
 		this.categoryResource.delete(id);
 	}
+	
 
 	@PUT
 	@Path("/{categId}")
