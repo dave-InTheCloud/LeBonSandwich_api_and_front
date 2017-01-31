@@ -57,7 +57,7 @@ public class CategoryRessource {
             this.em.remove(ref);
         } catch (EntityNotFoundException e) {
             // on veut supprimer, et elle n'existe pas, donc c'est bon
-        }  
+        }
     }
     
     /**
@@ -65,7 +65,7 @@ public class CategoryRessource {
      * @param id identificateur de la categorie
      * @return categorie identifiee
      */
-    public Category findById(String id){
+    public Category findById(String id) {
         return this.em.find(Category.class, id);
     }
     
@@ -74,13 +74,11 @@ public class CategoryRessource {
      * @param id identificateur de la categorie
      * @param categ categorie modifiee
      */
-    public void update(String id,Category categ) throws Exception {
-        try {
-            Category ref = this.em.getReference(Category.class, id);
-            this.em.remove(ref);
-        } catch (EntityNotFoundException e) {
-            // on veut supprimer, et elle n'existe pas, donc c'est bon 
-        }
+    public Category update(String id,Category categ) throws Exception {
+        Category ref = this.em.getReference(Category.class, id);
+        this.em.merge(categ);
+        
+        return null;
     }
     
     

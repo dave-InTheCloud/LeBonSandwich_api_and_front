@@ -24,6 +24,7 @@ import javax.ws.rs.core.UriInfo;
 
 import entity.Category;
 import entity.Ingredient;
+import javax.persistence.EntityNotFoundException;
 
 /**
  * Representation d'une Categorie d'Ingredient
@@ -75,10 +76,13 @@ public class CategoryRepresentation {
      */
     @GET
     @Path("/{id}")
-    public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
+    public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo){
         Category  c = this.categoryResource.findById(id);
         
-        return Response.ok(c, MediaType.APPLICATION_JSON).build();
+        if(c != null)
+            return Response.ok(c, MediaType.APPLICATION_JSON).build();
+        else
+            return Response.noContent().build();
     }
     
     /**
@@ -100,9 +104,8 @@ public class CategoryRepresentation {
     @PUT
     @Path("/{categId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Category update(@PathParam("categId") String categId, Category categ){
+    public Response update(@PathParam("categId") String categId, Category categ){
         Category c = this.categoryResource.update(categId ,categ);
-        
-        return c;
+        return Response.ok(c, MediaType.APPLICATION_JSON).build();
     }
 }

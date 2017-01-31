@@ -60,8 +60,10 @@ public class BreadRepresentation {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Bread find(@PathParam("id") String id){
-        return this.breadResource.findById(id);
+    public Response find(@PathParam("id") String id){
+        Bread bread = this.breadResource.findById(id);
+        
+        return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
     
     /**
