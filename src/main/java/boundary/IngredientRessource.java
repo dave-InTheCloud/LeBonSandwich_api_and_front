@@ -51,7 +51,7 @@ public class IngredientRessource {
 			Ingredient ref = this.em.getReference(Ingredient.class, id);
 			this.em.remove(ref);
 		} catch (EntityNotFoundException e) {
-			// on veut supprimer, et elle n'existe pas, donc c'est bon
+			e.printStackTrace();
 		}
 	}
 
@@ -64,7 +64,7 @@ public class IngredientRessource {
 			return ref;
 
 		} catch (EntityNotFoundException e) {
-
+			e.printStackTrace();
 			return null;
 		}
 	}

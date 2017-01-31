@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -43,7 +44,7 @@ public class CategoryRepresentation {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response findAll(@Context UriInfo uriInfo) {
+	public Response findAll() {
 		List<Category> l = this.categoryResource.findAll();
 
 		GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {
@@ -56,8 +57,8 @@ public class CategoryRepresentation {
 	@GET
 	@Path("/{id}")
 	public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
-		Category  c = this.categoryResource.findById(id);
-		
+		Category c = this.categoryResource.findById(id);
+
 		return Response.ok(c, MediaType.APPLICATION_JSON).build();
 	}
 
@@ -65,6 +66,15 @@ public class CategoryRepresentation {
 	@Path("/{categId}")
 	public void deleteCategory(@PathParam("categId") String id) {
 		this.categoryResource.delete(id);
+	}
+
+	@PUT
+	@Path("/{categId}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Category update(@PathParam("categId") String categId, Category categ) {
+		Category c = this.categoryResource.update(categId, categ);
+
+		return c;
 	}
 
 }

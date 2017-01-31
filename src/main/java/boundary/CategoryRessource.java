@@ -38,13 +38,26 @@ public class CategoryRessource {
 			  Category ref = this.em.getReference(Category.class, id);
 	            this.em.remove(ref);
 	        } catch (EntityNotFoundException e) {
-	            // on veut supprimer, et elle n'existe pas, donc c'est bon
+	        	e.printStackTrace();
 	        }
 		
 	}
 	
 	public Category findById(String id){
 		  return this.em.find(Category.class, id);
+	}
+
+	public Category update(String id,Category categ) {
+		 try {
+			  Category ref = this.em.getReference(Category.class, id);
+				ref.setName(categ.getName());
+				ref.setIngredients(categ.getIngredients());
+				return ref; 
+	        } catch (EntityNotFoundException e) {
+	        	e.printStackTrace();
+	        	return null;
+	        }
+	
 	}
 	
 
