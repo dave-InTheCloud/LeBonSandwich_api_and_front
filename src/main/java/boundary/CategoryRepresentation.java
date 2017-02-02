@@ -88,11 +88,14 @@ public class CategoryRepresentation {
     /**
      * Methode permettant de supprimer une categorie d'ingredients
      * @param id identificateur de la categorie a supprimer
+     * @return reponse HTTP
      */
     @DELETE
     @Path("/{categId}")
-    public void deleteCategory(@PathParam("categId") String id) {
+    public Response deleteCategory(@PathParam("categId") String id) {
         this.categoryResource.delete(id);
+        
+        return Response.ok().build();
     }
     
     /**
@@ -106,6 +109,7 @@ public class CategoryRepresentation {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("categId") String categId, Category categ){
         Category c = this.categoryResource.update(categId ,categ);
+        
         return Response.ok(c, MediaType.APPLICATION_JSON).build();
     }
 }

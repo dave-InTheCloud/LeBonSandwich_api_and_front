@@ -74,7 +74,7 @@ public class CategoryRessource {
      * @param id identificateur de la categorie
      * @param categ categorie modifiee
      */
-    public Category update(String id,Category categ) throws Exception {
+    public Category update(String id,Category categ) {
         Category ref = this.em.getReference(Category.class, id);
         this.em.merge(categ);
         

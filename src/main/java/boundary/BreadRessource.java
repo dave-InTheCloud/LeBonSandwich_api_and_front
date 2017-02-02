@@ -21,7 +21,7 @@ public class BreadRessource {
      * EntityManager
      */
     @PersistenceContext
-    EntityManager em;
+            EntityManager em;
     
     /**
      * Methode permettant d'enregistrer un pain
@@ -78,5 +78,5 @@ public class BreadRessource {
         } catch (EntityExistsException ex){
             System.out.println("The object doesn't exist");
         }
-    }   
+    }
 }

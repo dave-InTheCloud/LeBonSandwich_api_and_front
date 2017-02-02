@@ -21,34 +21,47 @@ import javax.ws.rs.core.UriInfo;
 import entity.Category;
 import entity.OrderSandwich;
 
-
+/**
+ * Representation d'une ressource Order
+ */
 @Path("/order")
-
 @Stateless
 public class OrderRepresentation {
-	
-	@EJB
+    /**
+     * Ressource Order
+     */
+    @EJB
     private OrderRessource orderRessource;
-	
-	 @POST
-	 @Consumes(MediaType.APPLICATION_JSON)
-	   public Response addOrder(@Context UriInfo uriInfo) {
-		 OrderSandwich o = this.orderRessource.save();
-	        URI uri = uriInfo.getAbsolutePathBuilder().path(o.getId()).build();
-	        return Response.created(uri)
-	                .entity(o)
-	                .build();
-	    }
-	 
-	 @GET
-	 @Produces(MediaType.APPLICATION_JSON)
-	 public Response findAll(@Context UriInfo uriInfo){
-		 List<OrderSandwich> l  = this.orderRessource.findAll();
-		  
-		 GenericEntity<List<OrderSandwich>> list = new GenericEntity<List<OrderSandwich>>(l) {};
-		 
-		 return Response.ok(list, MediaType.APPLICATION_JSON).build();
-	 }
-	 
-	
+    
+    /**
+     * Methode permettant d'ajouter une commande
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addOrder(@Context UriInfo uriInfo) {
+        OrderSandwich o = this.orderRessource.save();
+        URI uri = uriInfo.getAbsolutePathBuilder().path(o.getId()).build();
+        return Response.created(uri)
+                .entity(o)
+                .build();
+    }
+    
+    /**
+     * Methode permettant de recuperer la liste des commandes
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP contentn la liste des commandes
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findAll(@Context UriInfo uriInfo){
+        List<OrderSandwich> l  = this.orderRessource.findAll();
+        
+        GenericEntity<List<OrderSandwich>> list = new GenericEntity<List<OrderSandwich>>(l) {};
+        
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+    }
+    
+    
 }

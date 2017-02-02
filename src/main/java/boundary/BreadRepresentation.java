@@ -75,16 +75,20 @@ public class BreadRepresentation {
     public Response findAll(@Context UriInfo uriInfo){
         List<Bread> l = this.breadResource.findAll();
         GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
+        
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
     /**
      * Methode permettant de supprimer un pain defini par son identificateur
      * @param id identificateur du pain a supprimer
+     * @return reponse HTTP
      */
     @DELETE
     @Path("{id}")
-    public void delete(@PathParam("id") String id){
+    public Response delete(@PathParam("id") String id){
         this.breadResource.delete(id);
+        
+        return Response.ok().build();
     }
 }

@@ -22,60 +22,97 @@ import javax.ws.rs.core.UriInfo;
 import entity.CategoryBindIngredient;
 import entity.Ingredient;
 
-@Path("/ingredient")
+/**
+ * Representation d'un Ingredient
+ */
+@Path("/ingredients")
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class IngredientRepresentation {
-
-	@EJB
-	private IngredientRessource ingredientResource;
-	@EJB
-	private CategoryRessource categoryRessource;
-
-	@POST
-	@Path("/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response addIngredient(CategoryBindIngredient c, @Context UriInfo uriInfo) {
-		Ingredient i = this.ingredientResource.save(c);
-		URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
-		return Response.created(uri).entity(i).build();
-
-	}
-
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response findAll() {
-		List<Ingredient> l = this.ingredientResource.findAll();
-
-		GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {
-		};
-
-		return Response.ok(list, MediaType.APPLICATION_JSON).build();
-
-	}
-
-	@GET
-	@Path("/{id}")
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response findById(@PathParam("id") String id) {
-		Ingredient i = this.ingredientResource.findById(id);
-
-		return Response.ok(i, MediaType.APPLICATION_JSON).build();
-	}
-
-	@DELETE
-	@Path("/{id}")
-	public void delete(@PathParam("id") String id) {
-		this.ingredientResource.delete(id);
-	}
-
-	@PUT
-	@Path("/{id}")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient c) {
-		Ingredient i = this.ingredientResource.update(id, c);
-
-		return Response.ok(i, MediaType.APPLICATION_JSON).build();
-	}
-
+    /**
+     * Ressource d'un Ingredient
+     */
+    @EJB
+    private IngredientRessource ingredientResource;
+    
+    /**
+     * Ressource d'une Categorie
+     */
+    @EJB
+    private CategoryRessource categoryRessource;
+    
+    /**
+     * Methode permettant d'ajouter un ingredient
+     * @param ingredient ingredient a ajouter (binde avec une categorie)
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
+    @POST
+    @Path("/")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response addIngredient(CategoryBindIngredient c, @Context UriInfo uriInfo) {
+        Ingredient i = this.ingredientResource.save(c);
+        URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
+        return Response.created(uri).entity(i).build();
+        
+    }
+    
+    /**
+     * Methode permettant de recuperer la liste de tous les Ingredients
+     * @return reponse HTTP
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findAll() {
+        List<Ingredient> l = this.ingredientResource.findAll();
+        
+        GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {
+        };
+        
+        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+        
+    }
+    
+    /**
+     * Methode permettant de recuperer un ingredient a partir de son identificateur
+     * @param id identificateur d'un ingredient
+     * @return reponse HTTP comportant l'ingredient
+     */
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findById(@PathParam("id") String id) {
+        Ingredient i = this.ingredientResource.findById(id);
+        
+        return Response.ok(i, MediaType.APPLICATION_JSON).build();
+    }
+    
+    /**
+     * Methode permettant de supprimer un ingredient a partir de son identificateur
+     * @param id identificateur d'un ingredient
+     * @return reponse HTTP
+     */
+    @DELETE
+    @Path("/{id}")
+    public Response delete(@PathParam("id") String id) {
+        this.ingredientResource.delete(id);
+        
+        return Response.ok().build();
+    }
+    
+    /**
+     * Methode permettant de mettre a jour un ingredient
+     * @param id identifiant de l'ingredient
+     * @param c ingredient binde avec la categorie
+     * @return reponse HTTP
+     */
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient c) {
+        Ingredient i = this.ingredientResource.update(id, c);
+        
+        return Response.ok(i, MediaType.APPLICATION_JSON).build();
+    }
+    
 }
