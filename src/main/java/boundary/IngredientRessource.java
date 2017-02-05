@@ -65,6 +65,7 @@ public class IngredientRessource {
 
 		} catch (EntityNotFoundException e) {
 			e.printStackTrace();
+			// renvoyer un status ou un réponse
 			return null;
 		}
 	}

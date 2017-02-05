@@ -51,11 +51,11 @@ public class CategoryRessource {
 		try {
 			Category ref = this.em.getReference(Category.class, id);
 			ref.setName(categ.getName());
-			ref.setIngredients(categ.getIngredients());
+			ref.setIngredients(categ.getIngredients()); 
 			return ref;
 		} catch (EntityNotFoundException e) {
 			e.printStackTrace();
-			return null;
+			return null;  
 		}
 
 	}

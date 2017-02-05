@@ -22,7 +22,7 @@ public class Sandwich implements Serializable  {
     private static final long serialVersionUID = 1L;
     
     
-	@Id 
+	@Id
 	private String id;
 	
 	@OneToOne
@@ -58,6 +58,24 @@ public class Sandwich implements Serializable  {
 	public void setIngredients(ArrayList<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public Bread getBread() {
+		return bread;
+	}
+
+	public void setBread(Bread bread) {
+		this.bread = bread;
+	}
+	
+	
 	
 	
 }

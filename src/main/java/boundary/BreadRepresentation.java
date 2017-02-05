@@ -62,7 +62,8 @@ public class BreadRepresentation {
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
-     @DELETE
+    
+    @DELETE
     @Path("{id}")
     public void delete(@PathParam("id") String id){
         this.breadResource.delete(id);
