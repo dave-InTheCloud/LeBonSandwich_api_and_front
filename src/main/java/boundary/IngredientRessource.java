@@ -19,6 +19,7 @@ import entity.Ingredient;
  */
 @Stateless // gestion transactionelle (plusieurs users en m�me temps)
 public class IngredientRessource {
+
     /**
      * EntityManager
      */
@@ -97,5 +98,5 @@ public class IngredientRessource {
             return null;
         }
     }
-    
+
 }

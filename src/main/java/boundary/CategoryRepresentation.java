@@ -34,6 +34,7 @@ import javax.persistence.EntityNotFoundException;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class CategoryRepresentation {
+
     /**
      * Ressource des categories
      */
@@ -112,4 +113,5 @@ public class CategoryRepresentation {
         
         return Response.ok(c, MediaType.APPLICATION_JSON).build();
     }
+
 }
