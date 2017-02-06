@@ -12,25 +12,37 @@ import javax.persistence.Query;
 import entity.OrderSandwich;
 import entity.Sandwich;
 
-@Stateless // gestion transactionelle (plusieurs users en m�me temps)
+/**
+ * Ressource d'une commande
+ */
+@Stateless
 public class OrderRessource {
-
-	@PersistenceContext
-	EntityManager em;
-	
-	
-	public OrderSandwich save(){
-		OrderSandwich order = new OrderSandwich();
-		order.setId(UUID.randomUUID().toString());
-		
-		return this.em.merge(order);
-	}
-	
-	public List<OrderSandwich> findAll() {
-		Query q = this.em.createNamedQuery("OrderSandwich.findAll", OrderSandwich.class);
-		// pour éviter les pbs de cache
-		q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
-		return q.getResultList();
-	}
-	
+    /**
+     * EntityManager
+     */
+    @PersistenceContext
+    EntityManager em;
+    
+    /**
+     * Methode permettant d'enregistrer une commande
+     * @return commande enregistree 
+     */
+    public OrderSandwich save(){
+        OrderSandwich order = new OrderSandwich();
+        order.setId(UUID.randomUUID().toString());
+        
+        return this.em.merge(order);
+    }
+    
+    /**
+     * Methode permettant de recuperer la liste des commandes
+     * @return liste des commandes
+     */
+    public List<OrderSandwich> findAll() {
+        Query q = this.em.createNamedQuery("OrderSandwich.findAll", OrderSandwich.class);
+        // pour éviter les pbs de cache
+        q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        return q.getResultList();
+    }
+    
 }

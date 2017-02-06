@@ -14,50 +14,71 @@ import javax.persistence.Query;
 import entity.Category;
 import entity.Ingredient;
 
-@Stateless // gestion transactionelle (plusieurs users en m�me temps)
+/**
+ * Ressource des Categories
+ */
+@Stateless
 public class CategoryRessource {
-
-	@PersistenceContext
-	EntityManager em;
-
-	public Category save(Category categ) {
-		Category c = new Category(categ.getName(), new ArrayList<Ingredient>());
-		c.setId(UUID.randomUUID().toString());
-		return this.em.merge(c);
-	}
-
-	public List<Category> findAll() {
-		Query q = this.em.createNamedQuery("Category.findAll", Category.class);
-		// pour éviter les pbs de cache
-		q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
-		return q.getResultList();
-	}
-
-	public void delete(String id) {
-		try {
-			Category ref = this.em.getReference(Category.class, id);
-			this.em.remove(ref);
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public Category findById(String id) {
-		return this.em.find(Category.class, id);
-	}
-
-	public Category update(String id, Category categ) {
-		try {
-			Category ref = this.em.getReference(Category.class, id);
-			ref.setName(categ.getName());
-			ref.setIngredients(categ.getIngredients());
-			return ref;
-		} catch (EntityNotFoundException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
+    /**
+     * EntityManager
+     */
+    @PersistenceContext
+            EntityManager em;
+    
+    /**
+     * Methode permettant d'enregistrer une categorie d'ingredients
+     * @param categ categorie a enregistrer
+     * @return categorie enregistree
+     */
+    public Category save(Category categ) {
+        Category c = new Category(categ.getName(), new ArrayList<Ingredient>());
+        c.setId(UUID.randomUUID().toString());
+        return this.em.merge(c);
+    }
+    
+    /**
+     * Methode permettant de recuperer toutes les categories d'ingredients
+     * @return liste des categories
+     */
+    public List<Category> findAll() {
+        Query q = this.em.createNamedQuery("Category.findAll", Category.class);
+        // pour éviter les pbs de cache
+        q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
+        return q.getResultList();
+    }
+    
+    /**
+     * Methode permettant de supprimer une categorie d'ingredients
+     * @param id identificateur de la categorie
+     */
+    public void delete(String id){
+        try {
+            Category ref = this.em.getReference(Category.class, id);
+            this.em.remove(ref);
+        } catch (EntityNotFoundException e) {
+            // on veut supprimer, et elle n'existe pas, donc c'est bon
+        }
+    }
+    
+    /**
+     * Methode permettant de recuperer une categorie
+     * @param id identificateur de la categorie
+     * @return categorie identifiee
+     */
+    public Category findById(String id) {
+        return this.em.find(Category.class, id);
+    }
+    
+    /**
+     * Methode permettant de mettre a jour une categorie
+     * @param id identificateur de la categorie
+     * @param categ categorie modifiee
+     */
+    public Category update(String id,Category categ) {
+        Category ref = this.em.getReference(Category.class, id);
+        this.em.merge(categ);
+        
+        return null;
+    }
+    
 }

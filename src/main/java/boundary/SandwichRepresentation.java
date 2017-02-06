@@ -8,18 +8,20 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
- 
 
-@Path("/sandwich")
+/**
+ * Representation d'une ressource Sandwich
+ */
+@Path("/sandwiches")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class SandwichRepresentation {
-
-	 @GET 
-	 @Path("/")
-	 public	String sayHello(){
-			return "hello world";
-		 
-	 }
+    
+    @GET
+    @Path("/")
+    public	String sayHello(){
+        return "hello world";
+        
+    }
 }

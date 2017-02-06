@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package boundary;
 
 import entity.Bread;
@@ -26,48 +21,74 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-
-@Path("/bread")
+/**
+ * Representation des Pains
+ */
+@Path("/breads")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class BreadRepresentation {
-    
-    
+    /**
+     * Ressource des pains
+     */
     @EJB
-    private BreadRessource breadResource; 
+    private BreadRessource breadResource;
     
+    /**
+     * Methode permettant d'ajouter un nouveau pain (methode HTTP: POST)
+     * @param bread pain a ajouter
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
         Bread b = this.breadResource.save(bread.getName(),bread.getSize());
         URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
-        System.out.println("Enregistrement du post Bread");
-	return Response.created(uri).entity(b).build();
+        
+        System.out.println("[POST]Enregistrement d'un nouveau Pain");
+        
+        return Response.created(uri).entity(b).build();
     }
     
-    
+    /**
+     * Methode permettant d'obtenir les donnees d'un pain defini par son id
+     * @param id identificateur du pain a obtenir
+     * @return pain correspondant a l'id
+     */
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Bread find(@PathParam("id") String id){
-        return this.breadResource.findById(id);
+    public Response find(@PathParam("id") String id){
+        Bread bread = this.breadResource.findById(id);
+        
+        return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
     
-
+    /**
+     * Methode permettant d'obtenir la liste de tous les pains
+     * @param uriInfo
+     * @return  reponse HTTP comportant la liste des pains
+     */
     @GET
     public Response findAll(@Context UriInfo uriInfo){
         List<Bread> l = this.breadResource.findAll();
         GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
+        
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
-     @DELETE
+    /**
+     * Methode permettant de supprimer un pain defini par son identificateur
+     * @param id identificateur du pain a supprimer
+     * @return reponse HTTP
+     */
+    @DELETE
     @Path("{id}")
-    public void delete(@PathParam("id") String id){
+    public Response delete(@PathParam("id") String id){
         this.breadResource.delete(id);
+        
+        return Response.ok().build();
     }
-    
-    
-       
 }
