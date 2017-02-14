@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @NamedQueries({
     @NamedQuery(name = "Ingredient.findAll", query = "SELECT i FROM Ingredient i")
 })
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingredient implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
