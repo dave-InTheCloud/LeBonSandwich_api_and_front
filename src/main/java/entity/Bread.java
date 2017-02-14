@@ -15,35 +15,27 @@ import javax.xml.bind.annotation.XmlRootElement;
 })
 public class Bread implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Id 
+
+	@Id
 	private String id;
 	private String name;
-	private String size;
-	
-	
+
+
 	public Bread(){
-		
+
 	}
-	
-	public Bread(String name, String size) {
+
+	public Bread(String name) {
 		this.name = name;
-		this.size = size;
 	}
-	
+
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getSize() {
-		return size;
-	}
-	public void setSize(String size) {
-		this.size = size;
-	}
-	
+
         public void setId(String id) {
 		this.id = id;
 	}
@@ -52,5 +44,5 @@ public class Bread implements Serializable {
 	public String getId() {
 		return this.id;
 	}
-	
+
 }

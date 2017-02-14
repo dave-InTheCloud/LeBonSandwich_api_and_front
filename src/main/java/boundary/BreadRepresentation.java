@@ -44,7 +44,7 @@ public class BreadRepresentation {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
-        Bread b = this.breadResource.save(bread.getName(),bread.getSize());
+        Bread b = this.breadResource.save(bread.getName());
         URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
         
         System.out.println("[POST]Enregistrement d'un nouveau Pain");

@@ -1,27 +1,39 @@
 package boundary;
 
+import entity.Sandwich;
+
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.net.URI;
 
 /**
  * Representation d'une ressource Sandwich
  */
 @Path("/sandwiches")
 @Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class SandwichRepresentation {
-    
-    @GET
-    @Path("/")
-    public	String sayHello(){
-        return "hello world";
-        
+
+    @EJB
+    SandwichResource sandwichResource;
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response create(Sandwich s, @Context UriInfo uriInfo) {
+        try {
+            sandwichResource.create(s);
+            URI uri = uriInfo.getAbsolutePathBuilder().path(s.getId()).build();
+            return Response.created(uri).entity(s).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+
     }
+
+
 }

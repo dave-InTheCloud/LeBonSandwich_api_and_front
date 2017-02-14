@@ -26,16 +26,14 @@ public class BreadRessource {
     /**
      * Methode permettant d'enregistrer un pain
      * @param name nom du pain a enregistrer
-     * @param size taille du pain a enregistrer
      * @return pain enregistre
      */
-    public Bread save(String name, String size){
+    public Bread save(String name){
         Bread b = new Bread();
         
         b.setId(UUID.randomUUID().toString());
         b.setName(name);
-        b.setSize(size);
-        
+
         return this.em.merge(b);
     }
     

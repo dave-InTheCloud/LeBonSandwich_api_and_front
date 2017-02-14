@@ -26,7 +26,6 @@ import entity.Ingredient;
  * Representation d'un Ingredient
  */
 @Path("/ingredients")
-@Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class IngredientRepresentation {
     /**
@@ -109,6 +108,7 @@ public class IngredientRepresentation {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient c) {
         Ingredient i = this.ingredientResource.update(id, c);
         
