@@ -42,14 +42,9 @@ public class BreadRessource {
      * @param id identificateur du pain
      * @return pain correspondant a l'identificateur
      */
-    public Bread findById(String id){
+    public Bread findById(String id) {
         Bread res = null;
-        
-        try{
-            res = this.em.find(Bread.class,id);
-        }catch(EntityNotFoundException e){
-            
-        }
+        res = this.em.find(Bread.class,id);
         
         return res;
     }
@@ -69,12 +64,8 @@ public class BreadRessource {
      * Methode permettant de supprimer un pain
      * @param id identificateur du pain a supprimer
      */
-    public void delete(String id){
-        try {
-            Bread ins = this.em.getReference(Bread.class,id);
-            this.em.remove(ins);
-        } catch (EntityExistsException ex){
-            System.out.println("The object doesn't exist");
-        }
+    public void delete(String id) throws Exception {
+        Bread ins = this.em.getReference(Bread.class,id);
+        this.em.remove(ins);
     }
 }

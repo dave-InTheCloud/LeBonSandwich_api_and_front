@@ -50,10 +50,13 @@ public class IngredientRepresentation {
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addIngredient(CategoryBindIngredient c, @Context UriInfo uriInfo) {
-        Ingredient i = this.ingredientResource.save(c);
-        URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
-        return Response.created(uri).entity(i).build();
-        
+        try {
+            Ingredient i = this.ingredientResource.save(c);
+            URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
+            return Response.created(uri).entity(i).build();
+        } catch(Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
     }
     
     /**
@@ -83,6 +86,9 @@ public class IngredientRepresentation {
     public Response findById(@PathParam("id") String id) {
         Ingredient i = this.ingredientResource.findById(id);
         
+        if(i == null)
+            return Response.noContent().build();
+            
         return Response.ok(i, MediaType.APPLICATION_JSON).build();
     }
     
@@ -94,9 +100,13 @@ public class IngredientRepresentation {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") String id) {
-        this.ingredientResource.delete(id);
+        try {
+            this.ingredientResource.delete(id);
         
-        return Response.ok().build();
+            return Response.ok().build();
+        } catch(Exception e) {
+            return Response.noContent().build();
+        }
     }
     
     /**

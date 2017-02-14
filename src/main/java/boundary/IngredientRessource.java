@@ -31,8 +31,14 @@ public class IngredientRessource {
      * @param c ingredient binde avec une categorie
      * @return ingredient enregistre
      */
-    public Ingredient save(CategoryBindIngredient c) {
+    public Ingredient save(CategoryBindIngredient c) throws Exception {
         Category categ = this.em.find(Category.class, c.getIdCateg());
+        
+        if(categ == null)
+            throw new Exception("Categorie introuvable");
+        
+        if(c.getNameIng() == null)
+            throw new Exception("Le nom est obligatoire");
         
         // cancel the save if ingredient already exist in this category
         for (Ingredient contains : categ.getIngredients()) {
@@ -70,13 +76,9 @@ public class IngredientRessource {
      * Methode permettant de supprimer un ingredient
      * @param id identificateur de l'ingredient a supprimer
      */
-    public void delete(String id) {
-        try {
-            Ingredient ref = this.em.getReference(Ingredient.class, id);
-            this.em.remove(ref);
-        } catch (EntityNotFoundException e) {
-            // on veut supprimer, et elle n'existe pas, donc c'est bon
-        }
+    public void delete(String id) throws Exception {
+        Ingredient ref = this.em.getReference(Ingredient.class, id);
+        this.em.remove(ref);
     }
     
     /**

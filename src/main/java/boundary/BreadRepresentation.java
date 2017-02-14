@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -44,12 +45,14 @@ public class BreadRepresentation {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
-        Bread b = this.breadResource.save(bread.getName());
-        URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
-        
-        System.out.println("[POST]Enregistrement d'un nouveau Pain");
-        
-        return Response.created(uri).entity(b).build();
+        if(bread.getName() != null) {
+            Bread b = this.breadResource.save(bread.getName());
+            URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
+
+            System.out.println("[POST]Enregistrement d'un nouveau Pain");
+
+            return Response.created(uri).entity(b).build();
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
     /**
@@ -63,6 +66,9 @@ public class BreadRepresentation {
     public Response find(@PathParam("id") String id){
         Bread bread = this.breadResource.findById(id);
         
+        if(bread == null)
+            return Response.noContent().build();
+
         return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
     
@@ -87,8 +93,12 @@ public class BreadRepresentation {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") String id){
-        this.breadResource.delete(id);
-        
-        return Response.ok().build();
+        try {
+            this.breadResource.delete(id);
+
+            return Response.ok().build();   
+        } catch(Exception e) {
+            return Response.noContent().build();
+        }
     }
 }

@@ -33,10 +33,12 @@ public class CategoryRessource {
      * @param categ categorie a enregistrer
      * @return categorie enregistree
      */
-    public Category save(Category categ) {
-        Category c = new Category(categ.getName(), new ArrayList<Ingredient>(), categ.getLimiteNbIngredient());
-        c.setId(UUID.randomUUID().toString());
-        return this.em.merge(c);
+    public Category save(Category categ) throws Exception {
+        if(categ.getName() != null) {
+            Category c = new Category(categ.getName(), new ArrayList<Ingredient>(), categ.getLimiteNbIngredient());
+            c.setId(UUID.randomUUID().toString());
+            return this.em.merge(c);
+        } else throw new Exception("Donnees manquantes"); 
     }
 
     /**

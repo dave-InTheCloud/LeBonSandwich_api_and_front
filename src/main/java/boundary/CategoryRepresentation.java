@@ -44,7 +44,6 @@ public class CategoryRepresentation {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addCategory(Category categ, @Context UriInfo uriInfo) {
-
         try {
             Category c = this.categoryResource.save(categ);
             URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
@@ -102,7 +101,7 @@ public class CategoryRepresentation {
 
             return Response.ok().build();
         } catch (Exception e) {
-            return Response.status(Response.Status.NOT_FOUND).build();
+            return Response.noContent().build();
         }
     }
 
