@@ -43,9 +43,9 @@ public class SandwichResource {
 
         for (String idIng : s.getIdIngredients()) {
             System.out.println(idIng);
-            if (idIng != null) {
+           // if (idIng != null) {
                 listIng.add(this.em.find(Ingredient.class, idIng));
-            }
+            //}
         }
 
         /* verfié le nombre d'ingredient max
