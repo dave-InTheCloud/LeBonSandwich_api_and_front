@@ -1,5 +1,6 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -10,6 +11,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
 @XmlRootElement
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NamedQueries({
     @NamedQuery(name = "Bread.findAll", query = "SELECT b FROM Bread b")
 })

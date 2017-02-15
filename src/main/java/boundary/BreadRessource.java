@@ -67,6 +67,26 @@ public class BreadRessource {
         return q.getResultList();
     }
     
+      /**
+     * Methode permettant de mettre a jour un pain
+     * @param id identificateur du pain
+     * @param bread les nouveaux attributs de pain
+     * @return pain mis a jour
+     */
+    public Bread update(String id,Bread bread) throws EntityNotFoundException {
+        try {
+            Bread ref = this.em.getReference(Bread.class, id);
+            ref.setName(bread.getName());
+            ref.setSize(bread.getSize());
+
+            return ref;
+            
+        } catch (Exception e) {
+            System.out.println("pain non trouve");
+            return null;
+        }
+    }
+    
     /**
      * Methode permettant de supprimer un pain
      * @param id identificateur du pain a supprimer

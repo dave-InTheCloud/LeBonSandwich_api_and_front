@@ -36,7 +36,7 @@ public class BreadRessource {
     @Before
     public void initClient(){
         this.client = ClientBuilder.newClient();
-        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/bread/");
+        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/breads");
     }
 
     @Test
@@ -52,7 +52,27 @@ public class BreadRessource {
         Response postReponse = this.target.request(MediaType.APPLICATION_JSON).post(Entity.json(jsonCreate));
         assertThat(postReponse.getStatus(),is(201));
         
-      
+         //edition
+        JsonObject jsonEdit = insBuilder
+                .add("name","test2")
+                .add("size","123").build();
+        
+        System.out.println(postReponse.getMetadata().get("location"));
+        
+         String IdToEdit=postReponse.getHeaderString("id");
+         Response editReponse = this.target.path("").request(MediaType.APPLICATION_JSON).put(Entity.json(jsonEdit));
+         assertThat(editReponse.getStatus(),is(201));
+         
+        
+        //edition
+       /* JsonObject jsonEdit = insBuilder
+                .add("name","test")
+                .add("size","1").build();
+        
+        Response postReponseEdit = this.target.request(MediaType.APPLICATION_JSON).put(Entity.json(jsonEdit));
+        assertThat(postReponseEdit.getStatus(),is(201));*/
+        
+        
         
         String location = postReponse.getHeaderString("location");
         System.out.println("location : "+location);
@@ -71,7 +91,7 @@ public class BreadRessource {
         
         //delete
          Response deleteReponse = this.target.path(IdToDelete).request(MediaType.APPLICATION_JSON).delete();
-        assertThat(deleteReponse.getStatus(),is(204));
+        assertThat(deleteReponse.getStatus(),is(200));
         
     }
    

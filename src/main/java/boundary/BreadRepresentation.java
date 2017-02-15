@@ -11,6 +11,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -50,6 +51,29 @@ public class BreadRepresentation {
         System.out.println("[POST]Enregistrement d'un nouveau Pain");
         
         return Response.created(uri).entity(b).build();
+    }
+    
+    
+       /**
+     * Methode PUT permettant de modifier du pain
+     * @param destination JSON avec tous les attribut du nouveau pain
+     * @param id    id du pain a modifier
+     * @param uriInfo
+     * @return Réponse contenant le nouveau pain si la modification a bien eu lieu
+     */
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateIngredient(@PathParam("id") String id,Bread bread) {
+        Bread i = this.breadResource.update(id,bread);
+        
+        if(i != null){
+            return Response.ok(i, MediaType.APPLICATION_JSON).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        
+        
     }
     
     /**
