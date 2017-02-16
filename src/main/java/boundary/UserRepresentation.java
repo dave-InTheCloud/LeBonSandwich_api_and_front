@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -153,13 +155,23 @@ public class UserRepresentation {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(User user, @PathParam("idUser") String idUser, @Context UriInfo uriInfo){
-        user.setId(idUser);
-        user = this.userRessource.update(user);
-        URI uri = uriInfo.getBaseUriBuilder()
-                .path(UserRepresentation.class)
-                .path(user.getId())
-                .build();
-        return Response.ok(uri).entity(user).build();
+        try {
+            user.setId(idUser);
+            user = this.userRessource.update(user);
+            URI uri = uriInfo.getBaseUriBuilder()
+                    .path(UserRepresentation.class)
+                    .path(user.getId())
+                    .build();
+            if(user.getId().equals(idUser))
+                return Response.ok(uri).entity(user).build();
+            else
+                return Response.created(uri).entity(user).build();
+        } catch (AlreadyExistException e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                .add("error",e.getMessage()).build();
+            return Response.status(Response.Status.CONFLICT).entity(errorJson).build();
+        }
     }
     
     

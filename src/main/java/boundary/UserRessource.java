@@ -92,8 +92,26 @@ public class UserRessource {
      * @param user utilisateur a modifier
      * @return utilisateur modifié
      */
-    public User update(User user) {
-        return this.em.merge(user);
+    public User update(User user) throws AlreadyExistException {
+        User u = this.findById(user.getId());
+        user.hashPassword();
+        if(u == null){
+            //Si aucun utilisateur n'est trouvé, on en crée un
+            try{
+            List<User> users = this.findAll();
+            // On annule si un user est deja crée avec l'adresse mail donnée
+            for (User contains : users) {
+                if (contains.getEmail().equals(user.getEmail())) {
+                    throw new AlreadyExistException("Adresse mail déjà utilisée");
+                }
+            }
+        } catch(NoResultException e){}
+            user.setId(UUID.randomUUID().toString());
+            this.em.persist(user);
+            return user;
+        } else{
+            return this.em.merge(user);
+        }
     }
     
     /**
