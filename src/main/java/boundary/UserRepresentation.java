@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -184,8 +182,13 @@ public class UserRepresentation {
     @Secured
     @Path("/{idUser}")
     public Response deleteUser(@PathParam("idUser") String id){
-        this.userRessource.delete(id);
-        return Response.ok().build();
+        try{
+            this.userRessource.delete(id);
+            return Response.ok().build(); 
+        } catch(NoResultException e){
+            return Response.noContent().build();
+        }
+        
     }
     
     /**

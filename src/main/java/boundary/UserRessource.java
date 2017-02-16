@@ -17,7 +17,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class UserRessource {
-     /**
+    /**
      * Objet faisant le lien avec la base de données
      */
     @PersistenceContext
@@ -28,7 +28,7 @@ public class UserRessource {
      * @param user l'utilisateur a ajouter
      * @return utilisateur ajouté a la base
      * @throws AlreadyExistException  Si un utilisateur existe deja avec cette adresse email
-     * @throws Exception 
+     * @throws Exception
      */
     public User save(User user) throws Exception{
         try{
@@ -98,14 +98,14 @@ public class UserRessource {
         if(u == null){
             //Si aucun utilisateur n'est trouvé, on en crée un
             try{
-            List<User> users = this.findAll();
-            // On annule si un user est deja crée avec l'adresse mail donnée
-            for (User contains : users) {
-                if (contains.getEmail().equals(user.getEmail())) {
-                    throw new AlreadyExistException("Adresse mail déjà utilisée");
+                List<User> users = this.findAll();
+                // On annule si un user est deja crée avec l'adresse mail donnée
+                for (User contains : users) {
+                    if (contains.getEmail().equals(user.getEmail())) {
+                        throw new AlreadyExistException("Adresse mail déjà utilisée");
+                    }
                 }
-            }
-        } catch(NoResultException e){}
+            } catch(NoResultException e){}
             user.setId(UUID.randomUUID().toString());
             this.em.persist(user);
             return user;
@@ -118,12 +118,10 @@ public class UserRessource {
      * Methode permettant de supprimer un utilisateur via son id
      * @param id id de l'utilisateur a supprimer
      */
-    public void delete(String id) {
-        try {
-            User user = this.em.getReference(User.class, id);
-            this.em.remove(user);
-        } catch (EntityNotFoundException e) {
-            // on veut supprimer, et elle n'existe pas, donc c'est bon
-        }
+    public void delete(String id) throws NoResultException {
+        User user = this.em.find(User.class, id);
+        if(user == null)
+            throw new NoResultException();
+        this.em.remove(user);
     }
 }
