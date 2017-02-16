@@ -88,11 +88,16 @@ public class CategoryRessource {
         boolean created = false;
         Category ref = this.em.find(Category.class, id);
         
-        if(ref == null)
+        if(ref == null) {
             created = true;
-        
-        ref.setName(category.getName());
-        ref.setIngredients(ref.getIngredients());
+            ref = new Category();
+            ref.setName(category.getName());
+            ref.setId(id);
+            ref.setLimiteNbIngredient(category.getLimiteNbIngredient());
+        } else {
+            ref.setName(category.getName());
+            ref.setIngredients(ref.getIngredients());
+        }
         
         this.em.merge(ref);
         
