@@ -28,9 +28,9 @@ public class SandwichResource {
         res.setId(UUID.randomUUID().toString());
         int tailleSandwich = s.getTaille();
 
-        if(tailleSandwich > 4 || tailleSandwich < 7){
+        if (tailleSandwich > 4 || tailleSandwich < 7) {
             res.setTaille(tailleSandwich);
-        }else{
+        } else {
             throw (new BadRequestException());
         }
 
@@ -43,10 +43,10 @@ public class SandwichResource {
 
         //get bread by id and add to sandwich
         Bread b = this.em.find(Bread.class, s.getIdBread());
-        if(b != null) {
+        if (b != null) {
             res.setBread(b);
-        }else{
-            throw  (new BadRequestException());
+        } else {
+            throw (new BadRequestException());
         }
         //get all id in list of id ingredients and add ingredients to sandwich
         List<Ingredient> listIng = new ArrayList<Ingredient>();
@@ -54,7 +54,7 @@ public class SandwichResource {
         for (int i = 0; i < s.getIdIngredients().size(); i++) {
             if (s.getIdIngredients().get(i) != null) {
                 listIng.add(this.em.find(Ingredient.class, s.getIdIngredients().get(i)));
-            }else{
+            } else {
                 throw (new BadRequestException());
             }
         }
@@ -124,17 +124,27 @@ public class SandwichResource {
         Sandwich ref = this.em.find(Sandwich.class, id);
 
         int tailleSandwich = s.getTaille();
-        ref.setTaille(tailleSandwich);
+        if (tailleSandwich > 4 || tailleSandwich < 7) {
+            ref.setTaille(tailleSandwich);
+        } else {
+            throw (new BadRequestException());
+        }
 
         //get bread by id and add to sandwich
         Bread b = this.em.find(Bread.class, s.getIdBread());
-        ref.setBread(b);
-
+        if (b != null) {
+            ref.setBread(b);
+        }
         //get all id in list of id ingredients and add ingredients to sandwich
         List<Ingredient> listIng = new ArrayList<Ingredient>();
 
         for (int i = 0; i < s.getIdIngredients().size(); i++) {
-            listIng.add(this.em.find(Ingredient.class, s.getIdIngredients().get(i)));
+           String val =  s.getIdIngredients().get(i);
+            if (val != null) {
+                listIng.add(this.em.find(Ingredient.class, val));
+            }else{
+                throw  (new BadRequestException());
+            }
         }
 
         //Category ref = this.em.getReference(Category.class, id);
