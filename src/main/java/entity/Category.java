@@ -38,7 +38,7 @@ public class Category implements Serializable {
 	}
 	
 
-	public Category(String name, List<Ingredient> ingredients) {
+	public Category(String name/*, List<Ingredient> ingredients*/) {
 		this.name = name;
 		this.ingredients = new ArrayList<Ingredient>();
 	}

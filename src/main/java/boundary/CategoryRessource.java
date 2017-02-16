@@ -31,7 +31,7 @@ public class CategoryRessource {
      * @return categorie enregistree
      */
     public Category save(Category categ) {
-        Category c = new Category(categ.getName(), new ArrayList<Ingredient>());
+        Category c = new Category(categ.getName());
         c.setId(UUID.randomUUID().toString());
         return this.em.merge(c);
     }
@@ -75,10 +75,21 @@ public class CategoryRessource {
      * @param categ categorie modifiee
      */
     public Category update(String id,Category categ) {
-        Category ref = this.em.getReference(Category.class, id);
-        this.em.merge(categ);
+        //Category ref = this.em.getReference(Category.class, id);
+        //this.em.merge(categ);
+        //return null;
         
-        return null;
+         try {
+            Category ref = this.em.getReference(Category.class, id);
+            ref.setName(ref.getName());
+            ref.setIngredients(ref.getIngredients());
+
+            return ref;
+            
+        } catch (Exception e) {
+            System.out.println("pain non trouve");
+            return null;
+        }
     }
     
 }

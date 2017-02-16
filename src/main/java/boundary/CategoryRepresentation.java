@@ -111,7 +111,13 @@ public class CategoryRepresentation {
     public Response update(@PathParam("categId") String categId, Category categ){
         Category c = this.categoryResource.update(categId ,categ);
         
-        return Response.ok(c, MediaType.APPLICATION_JSON).build();
+        if(c != null){
+            return Response.ok(c, MediaType.APPLICATION_JSON).build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        
+       // return Response.ok(c, MediaType.APPLICATION_JSON).build();
     }
 
 }

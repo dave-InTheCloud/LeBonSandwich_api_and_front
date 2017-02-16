@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import entity.Category;
 import java.math.BigDecimal;
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -30,24 +31,23 @@ import static org.junit.Assert.*;
  */
 public class IngredientRessource {
     
-    private Client client;
+     private Client client;
     private WebTarget target;
     
     @Before
     public void initClient(){
         this.client = ClientBuilder.newClient();
-        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/ingredients");
+        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/categories");
     }
 
     @Test
-    public void testBread(){
-        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+    public void testIngredient(){
+         JsonObjectBuilder insBuilder = Json.createObjectBuilder();
         JsonObject jsonCreate = insBuilder
-                .add("name","test")
-                .add("size","2").build();
+                .add("name","test5651").build();
         
 
-        
+      
         //creation
         Response postReponse = this.target.request(MediaType.APPLICATION_JSON).post(Entity.json(jsonCreate));
         assertThat(postReponse.getStatus(),is(201));
@@ -62,29 +62,57 @@ public class IngredientRessource {
         
         String Id=getReponse.getString("id");
         
-        //edition
+        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/ingredients");
+        
+        
+        
+         jsonCreate = insBuilder
+                .add("nameIng","Steak haché")
+                .add("idCateg",Id).build();
+         
+         System.out.println(jsonCreate);
+        
+         //creation
+        postReponse = this.target.request(MediaType.APPLICATION_JSON).post(Entity.json(jsonCreate));
+        assertThat(postReponse.getStatus(),is(201));
+        
+        location = postReponse.getHeaderString("location");
+        System.out.println("location : "+location);
+        
+        // find
+        getReponse = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        assertTrue(getReponse.getString("name").contains("Steak haché"));
+        
+        Id=getReponse.getString("id");
+        
+          //edition
         JsonObject jsonEdit = insBuilder
-                .add("name","test2")
-                .add("size","123").build();
+                .add("nameIng","Steak haaaaaaaché")
+                .add("idCateg",Id).build();
         
         Response editReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).put(Entity.json(jsonEdit));
         assertThat(editReponse.getStatus(),is(200));
         
-        
         //verification
         JsonObject getReponseVerif = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
-        assertTrue(getReponseVerif.getString("name").contains("test2"));
+        assertTrue(getReponseVerif.getString("name").contains("Steak haaaaaaaché"));
         
         
-        //find all
+         //find all
         Response findAllReponse = this.target.request(MediaType.APPLICATION_JSON).get();
         assertThat(findAllReponse.getStatus(),is(200));
         JsonArray all = findAllReponse.readEntity(JsonArray.class);
         assertFalse(all.isEmpty());
         
+        
         //delete
-         Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).delete();
+        Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).delete();
         assertThat(deleteReponse.getStatus(),is(200));
+        
+   
+        
+        
+        
         
     }
    
