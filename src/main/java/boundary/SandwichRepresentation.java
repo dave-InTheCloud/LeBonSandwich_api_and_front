@@ -42,7 +42,7 @@ public class SandwichRepresentation {
         try {
             Sandwich res = this.sandwichResource.update(s, id);
 
-            return Response.ok().build();
+            return Response.ok(res).build();
         } catch (EntityNotFoundException e) {
             return Response.noContent().build();
         } catch (BadRequestException e2) {
