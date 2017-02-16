@@ -33,7 +33,7 @@ public class BreadRessource {
         
         b.setId(UUID.randomUUID().toString());
         b.setName(name);
-
+        
         return this.em.merge(b);
     }
     
@@ -58,6 +58,24 @@ public class BreadRessource {
         q.setHint("javax.persistence.cache.storeMode",CacheStoreMode.REFRESH);
         
         return q.getResultList();
+    }
+    
+    /**
+     * Methode permettant de mettre a jour un pain
+     * @param id identificateur du pain
+     * @param bread les nouveaux attributs de pain
+     * @return pain mis a jour
+     */
+    public boolean update(String id, Bread bread) throws EntityNotFoundException {
+        boolean created = false;
+        Bread ref = this.em.find(Bread.class, id);
+        
+        if(ref == null)
+            created = true;
+        
+        this.em.merge(bread);
+        
+        return created;
     }
     
     /**

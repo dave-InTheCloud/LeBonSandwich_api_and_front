@@ -12,6 +12,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -52,6 +53,30 @@ public class BreadRepresentation {
             System.out.println("[POST]Enregistrement d'un nouveau Pain");
 
             return Response.created(uri).entity(b).build();
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+    
+    /**
+     * Methode permettant d'ajouter un nouveau pain (methode HTTP: POST)
+     * @param bread pain a ajouter
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBread(@PathParam("id") String id, Bread bread, @Context UriInfo uriInfo){
+        if(bread.getName() != null) {
+            bread.setId(id);
+            URI uri = uriInfo.getBaseUriBuilder()
+                .path(BreadRepresentation.class)
+                .path(bread.getId())
+                .build();
+            
+            if(this.breadResource.update(id, bread))
+                return Response.created(uri).entity(bread).build();
+            else
+                return Response.ok(uri).entity(bread).build();
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
