@@ -14,31 +14,34 @@ import javax.persistence.OneToOne;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @XmlRootElement
 public class Sandwich implements Serializable  {
-    private static final long serialVersionUID = 1L;
-    
-    
-	@Id 
+	public final static int PETIT_FAIM =  4;
+	public final static int MOYENNE_FAIM = 5;
+	public final static int GROSSE_FIN =  6;
+	public final static int OGRE = 7;
+	public static final long serialVersionUID = 1L;
+
+	@Id
 	private String id;
-	
 	@OneToOne
 	@JsonManagedReference
 	private Bread bread;
-	
-	
+	@OneToMany
 	@JsonManagedReference
-	private ArrayList<Ingredient>ingredients;
-	
-	
+	private List<Ingredient>ingredients;
+
+	public int taille;
+
 	public Sandwich(){
 		
 	}
 	
-	public Sandwich(Bread Bread, ArrayList<Ingredient> ingredients) {
+	public Sandwich(Bread Bread, List<Ingredient> ingredients, int taille) {
 		this.bread = Bread;
 		this.ingredients = ingredients;
 	}
@@ -51,13 +54,36 @@ public class Sandwich implements Serializable  {
 		this.bread = typeBread;
 	}
 	
-	public ArrayList<Ingredient> getIngredients() {
+	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}
 	
-	public void setIngredients(ArrayList<Ingredient> ingredients) {
+	public void setIngredients(List<Ingredient> ingredients) {
 		this.ingredients = ingredients;
 	}
-	
-	
+
+
+	public int getTaille() {
+		return taille;
+	}
+
+	public void setTaille(int taille) {
+		this.taille = taille;
+	}
+
+	public Bread getBread() {
+		return bread;
+	}
+
+	public void setBread(Bread bread) {
+		this.bread = bread;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 }

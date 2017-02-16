@@ -26,15 +26,13 @@ public class BreadRessource {
     /**
      * Methode permettant d'enregistrer un pain
      * @param name nom du pain a enregistrer
-     * @param size taille du pain a enregistrer
      * @return pain enregistre
      */
-    public Bread save(String name, String size){
+    public Bread save(String name){
         Bread b = new Bread();
         
         b.setId(UUID.randomUUID().toString());
         b.setName(name);
-        b.setSize(size);
         
         return this.em.merge(b);
     }
@@ -44,14 +42,9 @@ public class BreadRessource {
      * @param id identificateur du pain
      * @return pain correspondant a l'identificateur
      */
-    public Bread findById(String id){
+    public Bread findById(String id) {
         Bread res = null;
-        
-        try{
-            res = this.em.find(Bread.class,id);
-        }catch(EntityNotFoundException e){
-            
-        }
+        res = this.em.find(Bread.class,id);
         
         return res;
     }
@@ -68,15 +61,33 @@ public class BreadRessource {
     }
     
     /**
+     * Methode permettant de mettre a jour un pain
+     * @param id identificateur du pain
+     * @param bread les nouveaux attributs de pain
+     * @return booleen indiquant si le pain a ete mis a jour ou cree
+     */
+    public boolean update(String id, Bread bread) {
+        boolean created = false;
+        Bread ref = this.em.find(Bread.class, id);
+        
+        if(ref == null)
+            created = true;
+        
+        this.em.merge(bread);
+        
+        return created;
+    }
+    
+    /**
      * Methode permettant de supprimer un pain
      * @param id identificateur du pain a supprimer
      */
-    public void delete(String id){
-        try {
-            Bread ins = this.em.getReference(Bread.class,id);
-            this.em.remove(ins);
-        } catch (EntityExistsException ex){
-            System.out.println("The object doesn't exist");
-        }
+    public void delete(String id) throws Exception {
+        Bread ins = this.em.getReference(Bread.class,id);
+        
+        if(ins == null)
+            throw new Exception("Le pain a supprimer n'a pas ete trouve");
+        
+        this.em.remove(ins);
     }
 }

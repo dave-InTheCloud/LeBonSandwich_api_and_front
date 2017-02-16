@@ -7,10 +7,12 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -44,12 +46,39 @@ public class BreadRepresentation {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
-        Bread b = this.breadResource.save(bread.getName(),bread.getSize());
-        URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
-        
-        System.out.println("[POST]Enregistrement d'un nouveau Pain");
-        
-        return Response.created(uri).entity(b).build();
+        if(bread.getName() != null) {
+            Bread b = this.breadResource.save(bread.getName());
+            URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
+
+            System.out.println("[POST]Enregistrement d'un nouveau Pain");
+
+            return Response.created(uri).entity(b).build();
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+    
+    /**
+     * Methode permettant de mettre a jour un pain (methode HTTP: PUT)
+     * @id id du pain a modifier
+     * @param bread pain a modifier
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
+     */
+    @PUT
+    @Path("/{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateBread(@PathParam("id") String id, Bread bread, @Context UriInfo uriInfo){
+        if(bread.getName() != null) {
+            bread.setId(id);
+            URI uri = uriInfo.getBaseUriBuilder()
+                .path(BreadRepresentation.class)
+                .path(bread.getId())
+                .build();
+            
+            if(this.breadResource.update(id, bread))
+                return Response.created(uri).entity(bread).build();
+            else
+                return Response.ok(uri).entity(bread).build();
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
     /**
@@ -63,6 +92,9 @@ public class BreadRepresentation {
     public Response find(@PathParam("id") String id){
         Bread bread = this.breadResource.findById(id);
         
+        if(bread == null)
+            return Response.noContent().build();
+
         return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
     
@@ -87,8 +119,12 @@ public class BreadRepresentation {
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") String id){
-        this.breadResource.delete(id);
-        
-        return Response.ok().build();
+        try {
+            this.breadResource.delete(id);
+
+            return Response.ok().build();   
+        } catch(Exception e) {
+            return Response.noContent().build();
+        }
     }
 }

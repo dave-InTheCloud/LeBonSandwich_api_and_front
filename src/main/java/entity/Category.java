@@ -27,18 +27,18 @@ public class Category implements Serializable {
 	@Id 
 	private String id;
 	private String name;
+
+	private int limiteNbIngredient;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
+	@OneToMany(orphanRemoval = true, mappedBy = "category", fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private List<Ingredient>ingredients;
-	
 	
 	public Category(){
 		
 	}
 	
-
-	public Category(String name, List<Ingredient> ingredients) {
+	public Category(String name, List<Ingredient> ingredients, int limiteNbIngredient) {
 		this.name = name;
 		this.ingredients = new ArrayList<Ingredient>();
 	}
@@ -72,6 +72,11 @@ public class Category implements Serializable {
 		return this.id;
 	}
 
-	
-	
+	public int getLimiteNbIngredient() {
+		return limiteNbIngredient;
+	}
+
+	public void setLimiteNbIngredient(int limiteNbIngredient) {
+		this.limiteNbIngredient = limiteNbIngredient;
+	}
 }

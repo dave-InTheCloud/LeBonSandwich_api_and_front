@@ -31,8 +31,14 @@ public class IngredientRessource {
      * @param c ingredient binde avec une categorie
      * @return ingredient enregistre
      */
-    public Ingredient save(CategoryBindIngredient c) {
+    public Ingredient save(CategoryBindIngredient c) throws Exception {
         Category categ = this.em.find(Category.class, c.getIdCateg());
+        
+        if(categ == null)
+            throw new Exception("Categorie introuvable");
+        
+        if(c.getNameIng() == null)
+            throw new Exception("Le nom est obligatoire");
         
         // cancel the save if ingredient already exist in this category
         for (Ingredient contains : categ.getIngredients()) {
@@ -70,33 +76,48 @@ public class IngredientRessource {
      * Methode permettant de supprimer un ingredient
      * @param id identificateur de l'ingredient a supprimer
      */
-    public void delete(String id) {
-        try {
-            Ingredient ref = this.em.getReference(Ingredient.class, id);
-            this.em.remove(ref);
-        } catch (EntityNotFoundException e) {
-            // on veut supprimer, et elle n'existe pas, donc c'est bon
-        }
+    public void delete(String id) throws Exception {
+        Ingredient ref = this.em.getReference(Ingredient.class, id);
+        
+        if(ref == null)
+            throw new Exception("L'ingredient n'a pas ete trouve.");
+            
+        this.em.remove(ref);
     }
     
     /**
      * Methode permettant de mettre a jour un ingredient
-     * @param id identificateur de l'ingredient
-     * @param c ingredient modifie binde a une categorie
-     * @return ingredient mis a jour
+     * @param id identificateur du pain
+     * @param ingredient les nouveaux attributs d'ingredient
+     * @return booleen indiquant si l'ingredient a ete cree ou mis a jour
      */
-    public Ingredient update(String id, CategoryBindIngredient c) {
-        try {
-            Ingredient ref = this.em.getReference(Ingredient.class, id);
-            Category categ = this.em.find(Category.class, c.getIdCateg());
+    public boolean update(String id, CategoryBindIngredient ingredient) throws Exception {
+        boolean created = false;
+        Ingredient ref = this.em.find(Ingredient.class, id);
+        
+        Category categ = this.em.find(Category.class, ingredient.getIdCateg());
+        
+        if(categ == null)
+            throw new Exception("Categorie introuvable");
+        
+        if(ref == null) {
+            created = true;
+            ref = new Ingredient(ingredient.getNameIng(), categ);
+            ref.setId(UUID.randomUUID().toString());
+        } else {
+            ref.setName(ingredient.getNameIng());
             ref.setCategory(categ);
-            ref.setName(c.getNameIng());
-            return ref;
-            
-        } catch (EntityNotFoundException e) {
-            
-            return null;
         }
+        
+        // cancel the save if ingredient already exist in this category
+        for (Ingredient contains : categ.getIngredients()) {
+            if (contains.getName().equals(ingredient.getNameIng())) {
+                return false;
+            }
+        }
+                
+        this.em.merge(ref);
+        
+        return created;
     }
-
 }
