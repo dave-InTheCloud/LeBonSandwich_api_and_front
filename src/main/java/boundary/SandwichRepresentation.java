@@ -2,10 +2,14 @@ package boundary;
 
 import entity.Sandwich;
 import entity.SandwichBindIngredientsAndBread;
+import exception.SandwichBadRequest;
+import exception.SandwichNotFoundExeception;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityNotFoundException;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
@@ -24,13 +28,21 @@ public class SandwichRepresentation {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo) {
+    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo){
         try {
-            Sandwich res = sandwichResource.create(s);
-            URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
-            return Response.created(uri).entity(res).build();
-        } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+            if (s.getIdIngredients() != null && s.getIdBread() != null){
+                Sandwich res = sandwichResource.create(s);
+                URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
+                return Response.created(uri).entity(res).build();
+            }else{
+                throw new BadRequestException("test");
+            }
+
+        } catch (SandwichBadRequest e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
         }
 
     }
@@ -38,15 +50,20 @@ public class SandwichRepresentation {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id) {
+    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id)   {
         try {
             Sandwich res = this.sandwichResource.update(s, id);
 
-            return Response.ok().build();
-        } catch (EntityNotFoundException e) {
+            return Response.ok(res, MediaType.APPLICATION_JSON).build();
+        } catch (SandwichNotFoundExeception e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder.add("error", e.getMessage()).build();
             return Response.noContent().build();
-        } catch (BadRequestException e2) {
-            return Response.status(Response.Status.BAD_REQUEST).build();
+        } catch (SandwichBadRequest e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
         }
     }
 
@@ -54,13 +71,19 @@ public class SandwichRepresentation {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
+        try {
+            List<Sandwich> l = this.sandwichResource.findAll();
 
-        List<Sandwich> l = this.sandwichResource.findAll();
+            GenericEntity<List<Sandwich>> list = new GenericEntity<List<Sandwich>>(l) {
+            };
 
-        GenericEntity<List<Sandwich>> list = new GenericEntity<List<Sandwich>>(l) {
-        };
-
-        return Response.ok(list, MediaType.APPLICATION_JSON).build();
+            return Response.ok(list, MediaType.APPLICATION_JSON).build();
+        }catch (NoContentException e){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.noContent().entity(errorJson).build();
+        }
     }
 
 
@@ -71,8 +94,11 @@ public class SandwichRepresentation {
         try {
             Sandwich s = this.sandwichResource.findById(id);
             return Response.ok(s, MediaType.APPLICATION_JSON).build();
-        } catch (Exception e) {
-            return Response.noContent().build();
+        } catch (SandwichNotFoundExeception e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.noContent().entity(errorJson).build();
         }
     }
 
@@ -85,11 +111,12 @@ public class SandwichRepresentation {
         try {
             this.sandwichResource.delete(id);
             return Response.ok().build();
-        } catch (EntityNotFoundException e) {
-
-            return Response.noContent().build();
+        } catch (SandwichNotFoundExeception e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.noContent().entity(errorJson).build();
         }
     }
-
 
 }
