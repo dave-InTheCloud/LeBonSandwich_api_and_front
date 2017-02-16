@@ -1,15 +1,19 @@
 package entity;
 
+import control.PasswordManagement;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.ws.rs.NotAuthorizedException;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.mindrot.jbcrypt.BCrypt;
 
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
+    @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
+    @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u where u.email =:email")
 })
 public class User {
 
@@ -60,6 +64,15 @@ public class User {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void authentifie(User user) {
+        if(!(this.email.equals(user.email) && BCrypt.checkpw(user.password, this.password)))
+            throw new NotAuthorizedException("Problème d'authentification");
+    }
+
+    public void hashPassword() {
+        this.password = PasswordManagement.digestPassword(this.password);
     }
     
 }
