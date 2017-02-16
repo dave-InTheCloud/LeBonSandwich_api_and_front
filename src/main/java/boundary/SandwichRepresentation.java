@@ -26,7 +26,6 @@ public class SandwichRepresentation {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo) {
         try {
-            System.out.println(s.getIdIngredients().get(0));
             Sandwich res = sandwichResource.create(s);
             URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
             return Response.created(uri).entity(res).build();
@@ -50,6 +49,19 @@ public class SandwichRepresentation {
     }
 
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response findByID(@PathParam("id") String id) {
+        try {
+            Sandwich s = this.sandwichResource.findById(id);
+            return Response.ok(s, MediaType.APPLICATION_JSON).build();
+        } catch (Exception e) {
+            return Response.noContent().build();
+        }
+    }
+
+
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
@@ -58,7 +70,6 @@ public class SandwichRepresentation {
         try {
             this.sandwichResource.delete(id);
             return Response.ok().build();
-
         } catch (EntityNotFoundException e) {
 
             return Response.noContent().build();

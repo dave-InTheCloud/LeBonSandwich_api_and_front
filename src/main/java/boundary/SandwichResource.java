@@ -100,6 +100,11 @@ public class SandwichResource {
         return q.getResultList();
     }
 
+    public Sandwich findById(String id) throws  EntityNotFoundException {
+        Sandwich s = this.em.find(Sandwich.class, id);
+        return  s;
+    }
+
     public void delete(String id)  throws EntityNotFoundException {
         Sandwich ref = this.em.getReference(Sandwich.class, id);
         this.em.remove(ref);
