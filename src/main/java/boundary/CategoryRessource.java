@@ -91,7 +91,10 @@ public class CategoryRessource {
         if(ref == null)
             created = true;
         
-        this.em.merge(category);
+        ref.setName(category.getName());
+        ref.setIngredients(ref.getIngredients());
+        
+        this.em.merge(ref);
         
         return created;
     }

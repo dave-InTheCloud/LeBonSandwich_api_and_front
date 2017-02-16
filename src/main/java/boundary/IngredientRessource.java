@@ -95,13 +95,19 @@ public class IngredientRessource {
         boolean created = false;
         Ingredient ref = this.em.find(Ingredient.class, id);
         
-        if(ref == null)
-            created = true;
-        
         Category categ = this.em.find(Category.class, ingredient.getIdCateg());
         
         if(categ == null)
             throw new Exception("Categorie introuvable");
+        
+        if(ref == null) {
+            created = true;
+            ref = new Ingredient(ingredient.getNameIng(), categ);
+            ref.setId(UUID.randomUUID().toString());
+        } else {
+            ref.setName(ingredient.getNameIng());
+            ref.setCategory(categ);
+        }
         
         // cancel the save if ingredient already exist in this category
         for (Ingredient contains : categ.getIngredients()) {
@@ -110,7 +116,7 @@ public class IngredientRessource {
             }
         }
                 
-        this.em.merge(ingredient);
+        this.em.merge(ref);
         
         return created;
     }

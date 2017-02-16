@@ -98,11 +98,13 @@ public class IngredientRepresentation {
      * @return reponse HTTP
      */
     @DELETE
-    @Path("/{id}")
+    @Path("{id}")
     public Response delete(@PathParam("id") String id) {
         try {
             this.ingredientResource.delete(id);
-        
+            
+            System.out.println(id);
+ 
             return Response.ok().build();
         } catch(Exception e) {
             return Response.noContent().build();
@@ -119,7 +121,7 @@ public class IngredientRepresentation {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBread(@PathParam("id") String id, CategoryBindIngredient ingredient, @Context UriInfo uriInfo){
+    public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient ingredient, @Context UriInfo uriInfo){
         if(ingredient.getNameIng() != null && ingredient.getIdCateg() != null) {
             try {
                 ingredient.setId(id);
@@ -128,10 +130,10 @@ public class IngredientRepresentation {
                     .path(id)
                     .build();
 
-                if(this.ingredientResource.update(id, ingredient))
-                    return Response.created(uri).entity(ingredient).build();
-                else
-                    return Response.ok(uri).entity(ingredient).build();
+                if(this.ingredientResource.update(id, ingredient)) {
+                    Ingredient ingredientModifie = this.ingredientResource.findById(id);
+                    return Response.created(uri).entity(ingredientModifie).build(); 
+                } else return Response.ok(uri).entity(ingredient).build();
             } catch(Exception e) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }

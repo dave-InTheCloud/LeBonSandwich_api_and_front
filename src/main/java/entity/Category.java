@@ -30,7 +30,7 @@ public class Category implements Serializable {
 
 	private int limiteNbIngredient;
 	
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
+	@OneToMany(orphanRemoval = true, mappedBy = "category", fetch = FetchType.EAGER)
 	@JsonManagedReference
 	private List<Ingredient>ingredients;
 	

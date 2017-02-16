@@ -26,8 +26,6 @@ public class CategoryBindIngredient {
         this.id = id;
     }
     
-    
-    
     public String getIdCateg() {
         return idCateg;
     }

@@ -115,7 +115,7 @@ public class CategoryRepresentation {
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response updateBread(@PathParam("id") String id, Category category, @Context UriInfo uriInfo){
+    public Response update(@PathParam("id") String id, Category category, @Context UriInfo uriInfo){
         if(category.getName() != null) {
             category.setId(id);
             URI uri = uriInfo.getBaseUriBuilder()
