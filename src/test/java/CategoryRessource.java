@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 
+import entity.Ingredient;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -28,7 +30,7 @@ import static org.junit.Assert.*;
  *
  * @author maxime
  */
-public class BreadRessource {
+public class CategoryRessource {
     
     private Client client;
     private WebTarget target;
@@ -36,11 +38,11 @@ public class BreadRessource {
     @Before
     public void initClient(){
         this.client = ClientBuilder.newClient();
-        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/breads");
+        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/categories");
     }
 
     @Test
-    public void testBread(){
+    public void testCategory(){
         JsonObjectBuilder insBuilder = Json.createObjectBuilder();
         JsonObject jsonCreate = insBuilder
                 .add("name","test").build();
@@ -62,8 +64,10 @@ public class BreadRessource {
         String Id=getReponse.getString("id");
         
         //edition
-        JsonObject jsonEdit = insBuilder
+       JsonObject jsonEdit = insBuilder
                 .add("name","test2").build();
+        
+        System.out.println(jsonEdit);
         
         Response editReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).put(Entity.json(jsonEdit));
         assertThat(editReponse.getStatus(),is(200));
@@ -81,8 +85,8 @@ public class BreadRessource {
         assertFalse(all.isEmpty());
         
         //delete
-         Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).delete();
-        assertThat(deleteReponse.getStatus(),is(200));
+         //Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).delete();
+        //assertThat(deleteReponse.getStatus(),is(200));
         
     }
    

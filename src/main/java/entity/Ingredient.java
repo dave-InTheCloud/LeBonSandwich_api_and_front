@@ -9,17 +9,16 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
 @XmlRootElement
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NamedQueries({
     @NamedQuery(name = "Ingredient.findAll", query = "SELECT i FROM Ingredient i")
 })
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Ingredient implements Serializable{
     private static final long serialVersionUID = 1L;
     

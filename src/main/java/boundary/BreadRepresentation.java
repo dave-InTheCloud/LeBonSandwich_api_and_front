@@ -81,6 +81,7 @@ public class BreadRepresentation {
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
+    
     /**
      * Methode permettant d'obtenir les donnees d'un pain defini par son id
      * @param id identificateur du pain a obtenir
