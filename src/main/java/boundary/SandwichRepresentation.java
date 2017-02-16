@@ -58,6 +58,7 @@ public class SandwichRepresentation {
         } catch (SandwichNotFoundExeception e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder.add("error", e.getMessage()).build();
+
             return Response.noContent().build();
         } catch (SandwichBadRequest e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
