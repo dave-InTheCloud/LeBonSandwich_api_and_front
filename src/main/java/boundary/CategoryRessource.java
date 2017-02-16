@@ -33,6 +33,7 @@ public class CategoryRessource {
      * @param categ categorie a enregistrer
      * @return categorie enregistree
      */
+
     public Category save(Category categ) {
         Category c = new Category(categ.getName(), new ArrayList<Ingredient>(), categ.getLimiteNbIngredient());
         c.setId(UUID.randomUUID().toString());
