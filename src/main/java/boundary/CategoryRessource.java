@@ -80,20 +80,19 @@ public class CategoryRessource {
 
     /**
      * Methode permettant de mettre a jour une categorie
-     *
-     * @param id    identificateur de la categorie
-     * @param categ categorie modifiee
+     * @param id identificateur du pain
+     * @param bread les nouveaux attributs de pain
+     * @return pain mis a jour
      */
-    public Category update(String id, Category categ) throws NotFoundException, BadRequestException {
+    public boolean update(String id, Category category) {
+        boolean created = false;
         Category ref = this.em.find(Category.class, id);
-        //Category ref = this.em.getReference(Category.class, id);
-        ref.setIngredients(categ.getIngredients());
-        ref.setLimiteNbIngredient(categ.getLimiteNbIngredient());
-        ref.setName(categ.getName());
-
-        return this.em.merge(ref);
-
-
+        
+        if(ref == null)
+            created = true;
+        
+        this.em.merge(category);
+        
+        return created;
     }
-
 }

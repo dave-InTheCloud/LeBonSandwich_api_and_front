@@ -106,26 +106,28 @@ public class CategoryRepresentation {
     }
 
     /**
-     * Methode permettant de mettre a jour une categorie d'ingredients
-     *
-     * @param categId identificateur de la categorie
-     * @param categ   categorie modifiee
-     * @return Reponse HTTP - ca devrait etre une reponse HTTP
+     * Methode permettant de mettre a jour une categorie (methode HTTP: PUT)
+     * @id id du pain a modifier
+     * @param category categorie a modifier
+     * @param uriInfo informations sur l'URI
+     * @return reponse HTTP
      */
     @PUT
-    @Path("/{categId}")
+    @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(@PathParam("categId") String categId, Category categ) {
-
-        try {
-            Category c = this.categoryResource.update(categId, categ);
-
-            return Response.ok(c, MediaType.APPLICATION_JSON).build();
-        }catch (NotFoundException e){
-            return  Response.status(Response.Status.NOT_FOUND).build();
-        }catch (BadRequestException e){
-            return  Response.status(Response.Status.BAD_REQUEST).build();
-        }
+    public Response updateBread(@PathParam("id") String id, Category category, @Context UriInfo uriInfo){
+        if(category.getName() != null) {
+            category.setId(id);
+            URI uri = uriInfo.getBaseUriBuilder()
+                .path(CategoryRepresentation.class)
+                .path(id)
+                .build();
+            
+            if(this.categoryResource.update(id, category))
+                return Response.created(uri).entity(category).build();
+            else
+                return Response.ok(uri).entity(category).build();
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
 }

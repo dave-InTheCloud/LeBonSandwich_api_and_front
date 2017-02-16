@@ -64,9 +64,9 @@ public class BreadRessource {
      * Methode permettant de mettre a jour un pain
      * @param id identificateur du pain
      * @param bread les nouveaux attributs de pain
-     * @return pain mis a jour
+     * @return booleen indiquant si le pain a ete mis a jour ou cree
      */
-    public boolean update(String id, Bread bread) throws EntityNotFoundException {
+    public boolean update(String id, Bread bread) {
         boolean created = false;
         Bread ref = this.em.find(Bread.class, id);
         
