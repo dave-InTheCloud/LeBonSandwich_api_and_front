@@ -110,19 +110,32 @@ public class IngredientRepresentation {
     }
     
     /**
-     * Methode permettant de mettre a jour un ingredient
-     * @param id identifiant de l'ingredient
-     * @param c ingredient binde avec la categorie
+     * Methode permettant de mettre a jour un ingredient (methode HTTP: PUT)
+     * @id id de l'ingredient a modifier
+     * @param ingredient ingredient a modifier
+     * @param uriInfo informations sur l'URI
      * @return reponse HTTP
      */
     @PUT
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient c) {
-        Ingredient i = this.ingredientResource.update(id, c);
-        
-        return Response.ok(i, MediaType.APPLICATION_JSON).build();
+    public Response updateBread(@PathParam("id") String id, CategoryBindIngredient ingredient, @Context UriInfo uriInfo){
+        if(ingredient.getNameIng() != null && ingredient.getIdCateg() != null) {
+            try {
+                ingredient.setId(id);
+                URI uri = uriInfo.getBaseUriBuilder()
+                    .path(CategoryRepresentation.class)
+                    .path(id)
+                    .build();
+
+                if(this.ingredientResource.update(id, ingredient))
+                    return Response.created(uri).entity(ingredient).build();
+                else
+                    return Response.ok(uri).entity(ingredient).build();
+            } catch(Exception e) {
+                return Response.status(Response.Status.BAD_REQUEST).build();
+            }
+        } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
 }

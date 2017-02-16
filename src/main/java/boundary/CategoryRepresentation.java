@@ -107,7 +107,7 @@ public class CategoryRepresentation {
 
     /**
      * Methode permettant de mettre a jour une categorie (methode HTTP: PUT)
-     * @id id du pain a modifier
+     * @id id de la categorie a modifier
      * @param category categorie a modifier
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP

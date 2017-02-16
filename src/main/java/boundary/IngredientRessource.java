@@ -87,22 +87,31 @@ public class IngredientRessource {
     
     /**
      * Methode permettant de mettre a jour un ingredient
-     * @param id identificateur de l'ingredient
-     * @param c ingredient modifie binde a une categorie
-     * @return ingredient mis a jour
+     * @param id identificateur du pain
+     * @param ingredient les nouveaux attributs d'ingredient
+     * @return booleen indiquant si l'ingredient a ete cree ou mis a jour
      */
-    public Ingredient update(String id, CategoryBindIngredient c) {
-        try {
-            Ingredient ref = this.em.getReference(Ingredient.class, id);
-            Category categ = this.em.find(Category.class, c.getIdCateg());
-            ref.setCategory(categ);
-            ref.setName(c.getNameIng());
-            return ref;
-            
-        } catch (EntityNotFoundException e) {
-            
-            return null;
+    public boolean update(String id, CategoryBindIngredient ingredient) throws Exception {
+        boolean created = false;
+        Ingredient ref = this.em.find(Ingredient.class, id);
+        
+        if(ref == null)
+            created = true;
+        
+        Category categ = this.em.find(Category.class, ingredient.getIdCateg());
+        
+        if(categ == null)
+            throw new Exception("Categorie introuvable");
+        
+        // cancel the save if ingredient already exist in this category
+        for (Ingredient contains : categ.getIngredients()) {
+            if (contains.getName().equals(ingredient.getNameIng())) {
+                return false;
+            }
         }
+                
+        this.em.merge(ingredient);
+        
+        return created;
     }
-
 }
