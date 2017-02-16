@@ -4,13 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -19,6 +13,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @XmlRootElement
+@NamedQueries({
+		@NamedQuery(name = "Sandwich.findAll", query = "SELECT i FROM Sandwich i")
+})
 public class Sandwich implements Serializable  {
 	public final static int PETIT_FAIM =  4;
 	public final static int MOYENNE_FAIM = 5;
@@ -28,11 +25,13 @@ public class Sandwich implements Serializable  {
 
 	@Id
 	private String id;
-	@OneToOne
-	@JsonManagedReference
+
+	@ManyToOne
+	//@JsonManagedReference
 	private Bread bread;
-	@OneToMany
-	@JsonManagedReference
+
+	@ManyToMany(fetch = FetchType.EAGER)
+	//@JsonManagedReference
 	private List<Ingredient>ingredients;
 
 	public int taille;
@@ -41,19 +40,13 @@ public class Sandwich implements Serializable  {
 		
 	}
 	
-	public Sandwich(Bread Bread, List<Ingredient> ingredients, int taille) {
+	public Sandwich(Bread Bread, ArrayList<Ingredient> ingredients, int taille) {
 		this.bread = Bread;
 		this.ingredients = ingredients;
+		this.taille = taille;
 	}
 	
-	public Bread getTypeBread() {
-		return bread;
-	}
-	
-	public void setTypeBread(Bread typeBread) {
-		this.bread = typeBread;
-	}
-	
+
 	public List<Ingredient> getIngredients() {
 		return ingredients;
 	}

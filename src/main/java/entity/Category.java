@@ -8,7 +8,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -40,7 +39,8 @@ public class Category implements Serializable {
 	
 	public Category(String name, List<Ingredient> ingredients, int limiteNbIngredient) {
 		this.name = name;
-		this.ingredients = new ArrayList<Ingredient>();
+		this.ingredients = ingredients;
+		this.limiteNbIngredient = limiteNbIngredient;
 	}
 
 	public String getName() {
