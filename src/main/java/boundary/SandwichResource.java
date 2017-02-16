@@ -6,6 +6,7 @@ import entity.Sandwich;
 import entity.SandwichBindIngredientsAndBread;
 
 import javax.ejb.Stateless;
+import javax.jms.Session;
 import javax.persistence.*;
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
@@ -41,12 +42,10 @@ public class SandwichResource {
         //get all id in list of id ingredients and add ingredients to sandwich
         List<Ingredient> listIng = new ArrayList<Ingredient>();
 
-        for (String idIng : s.getIdIngredients()) {
-            System.out.println(idIng);
-           // if (idIng != null) {
-                listIng.add(this.em.find(Ingredient.class, idIng));
-            //}
+        for(int i= 0; i< s.getIdIngredients().size(); i++){
+            listIng.add(this.em.find(Ingredient.class,s.getIdIngredients().get(i)));
         }
+
 
         /* verfié le nombre d'ingredient max
 

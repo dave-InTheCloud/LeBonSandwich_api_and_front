@@ -28,7 +28,7 @@ public class Ingredient implements Serializable{
 	private String name;
 	
 	@ManyToOne
-	@JsonBackReference
+	//@JsonBackReference
 	private Category category;
 	
 	public Ingredient(){

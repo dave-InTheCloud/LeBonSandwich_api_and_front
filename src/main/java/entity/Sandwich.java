@@ -25,10 +25,12 @@ public class Sandwich implements Serializable  {
 
 	@Id
 	private String id;
-	@OneToOne
+
+	@ManyToOne
 	//@JsonManagedReference
 	private Bread bread;
-	@OneToMany
+
+	@ManyToMany(fetch = FetchType.EAGER)
 	//@JsonManagedReference
 	private List<Ingredient>ingredients;
 
@@ -38,7 +40,7 @@ public class Sandwich implements Serializable  {
 		
 	}
 	
-	public Sandwich(Bread Bread, List<Ingredient> ingredients, int taille) {
+	public Sandwich(Bread Bread, ArrayList<Ingredient> ingredients, int taille) {
 		this.bread = Bread;
 		this.ingredients = ingredients;
 		this.taille = taille;

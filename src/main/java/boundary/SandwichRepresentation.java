@@ -26,6 +26,7 @@ public class SandwichRepresentation {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo) {
         try {
+            System.out.println(s.getIdIngredients().get(0));
             Sandwich res = sandwichResource.create(s);
             URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
             return Response.created(uri).entity(res).build();
