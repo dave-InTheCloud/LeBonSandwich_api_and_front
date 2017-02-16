@@ -57,9 +57,14 @@ public class CategoryRessource {
      * Methode permettant de supprimer une categorie d'ingredients
      *
      * @param id identificateur de la categorie
+     * @throws java.lang.Exception
      */
     public void delete(String id) throws Exception {
         Category ref = this.em.getReference(Category.class, id);
+        
+        if(ref == null)
+            throw new Exception("La categorie recherchee n'a pas été trouvée.");
+        
         this.em.remove(ref);
     }
 

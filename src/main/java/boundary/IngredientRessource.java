@@ -78,6 +78,10 @@ public class IngredientRessource {
      */
     public void delete(String id) throws Exception {
         Ingredient ref = this.em.getReference(Ingredient.class, id);
+        
+        if(ref == null)
+            throw new Exception("L'ingredient n'a pas ete trouve.");
+            
         this.em.remove(ref);
     }
     

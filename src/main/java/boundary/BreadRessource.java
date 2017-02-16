@@ -66,6 +66,10 @@ public class BreadRessource {
      */
     public void delete(String id) throws Exception {
         Bread ins = this.em.getReference(Bread.class,id);
+        
+        if(ins == null)
+            throw new Exception("Le pain a supprimer n'a pas ete trouve");
+        
         this.em.remove(ins);
     }
 }
