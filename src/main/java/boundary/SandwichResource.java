@@ -8,6 +8,7 @@ import entity.SandwichBindIngredientsAndBread;
 import javax.ejb.Stateless;
 import javax.jms.Session;
 import javax.persistence.*;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -100,9 +101,34 @@ public class SandwichResource {
         return q.getResultList();
     }
 
+
     public Sandwich findById(String id) throws  EntityNotFoundException {
         Sandwich s = this.em.find(Sandwich.class, id);
         return  s;
+    }
+
+
+    public  Sandwich update(SandwichBindIngredientsAndBread s, String id) throws  EntityNotFoundException, BadRequestException{
+        Sandwich ref = this.em.find(Sandwich.class, id);
+
+        int tailleSandwich = s.getTaille();
+        ref.setTaille(tailleSandwich);
+
+        //get bread by id and add to sandwich
+        Bread b = this.em.find(Bread.class, s.getIdBread());
+        ref.setBread(b);
+
+        //get all id in list of id ingredients and add ingredients to sandwich
+        List<Ingredient> listIng = new ArrayList<Ingredient>();
+
+        for(int i= 0; i< s.getIdIngredients().size(); i++){
+            listIng.add(this.em.find(Ingredient.class,s.getIdIngredients().get(i)));
+        }
+
+        //Category ref = this.em.getReference(Category.class, id);
+        ref.setIngredients(listIng);
+
+        return  this.em.merge(ref);
     }
 
     public void delete(String id)  throws EntityNotFoundException {

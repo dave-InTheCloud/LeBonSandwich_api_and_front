@@ -35,6 +35,21 @@ public class SandwichRepresentation {
 
     }
 
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("{id}")
+    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id) {
+        try {
+            Sandwich res = this.sandwichResource.update(s, id);
+
+            return Response.ok().build();
+        } catch (EntityNotFoundException e) {
+            return Response.noContent().build();
+        } catch (BadRequestException e2) {
+            return Response.status(Response.Status.BAD_REQUEST).build();
+        }
+    }
+
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
