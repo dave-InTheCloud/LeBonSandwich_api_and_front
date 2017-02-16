@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
  *
  * @author maxime
  */
-public class BreadRessource {
+public class IngredientRessource {
     
     private Client client;
     private WebTarget target;
@@ -36,7 +36,7 @@ public class BreadRessource {
     @Before
     public void initClient(){
         this.client = ClientBuilder.newClient();
-        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/breads");
+        this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/ingredients");
     }
 
     @Test

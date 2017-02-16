@@ -10,10 +10,12 @@ import javax.persistence.NamedQuery;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
 @XmlRootElement
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @NamedQueries({
     @NamedQuery(name = "Ingredient.findAll", query = "SELECT i FROM Ingredient i")
 })
