@@ -15,6 +15,7 @@ import entity.OrderSandwich;
 import entity.OrderBindSandwich;
 import exception.OrderBadRequest;
 import exception.OrderNotFound;
+import exception.OrderPayed;
 
 /**
  * Representation d'une ressource OrderSandwich
@@ -128,9 +129,28 @@ public class OrderRepresentation {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
                     .add("error", e.getMessage()).build();
-            return Response.status(Response.Status.NOT_FOUND).entity(errorJson).build();
+            return Response.noContent().entity(errorJson).build();
         }
 
+    }
+
+    @POST
+    @Path("{id}/pay")
+    public Response payed(@PathParam("id") String id){
+        try{
+            this.orderRessource.pay(id);
+            return Response.ok("satus : "+OrderSandwich.PAYER +"(Payé)", MediaType.TEXT_PLAIN).build();
+        }catch (NoContentException e){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.noContent().entity(errorJson).build();
+        }catch (OrderPayed e){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.ok().entity(errorJson).build();
+        }
     }
 
 

@@ -15,6 +15,7 @@ import entity.OrderBindSandwich;
 import entity.Sandwich;
 import exception.OrderBadRequest;
 import exception.OrderNotFound;
+import exception.OrderPayed;
 
 /**
  * Ressource d'une commande
@@ -102,7 +103,7 @@ public class OrderRessource {
     public OrderSandwich update(OrderBindSandwich o, String id) throws OrderNotFound, OrderBadRequest {
         OrderSandwich res = this.em.find(OrderSandwich.class, id);
         if(res == null){
-            throw  new OrderNotFound("Aucune commmande avec cette id trouvé");
+            throw  new OrderNotFound("Aucune commmande avec cette id trouve");
         }
 
         Set<Sandwich> listSandwich = new HashSet<Sandwich>();
@@ -136,5 +137,19 @@ public class OrderRessource {
             throw new OrderBadRequest("List sandwich invalide");
         }
 
+    }
+
+
+    public void pay(String id) throws NoContentException, OrderPayed {
+        OrderSandwich o = this.em.find(OrderSandwich.class, id);
+        if (o != null){
+            if(o.getStatus() != OrderSandwich.PAYER) {
+                o.setStatus(OrderSandwich.PAYER);
+            }else{
+                throw  new OrderPayed("Commande deja paye");
+            }
+        }else{
+            throw  new NoContentException("Aucune commande avec cette id");
+        }
     }
 }
