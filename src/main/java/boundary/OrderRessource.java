@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.core.NoContentException;
+import javax.ws.rs.core.Response;
 
 import entity.OrderSandwich;
 import entity.Sandwich;
@@ -97,12 +98,14 @@ public class OrderRessource {
        OrderSandwich o =  this.em.find(OrderSandwich.class, idOrder);
        Sandwich s = this.em.find(Sandwich.class, idSandwich);
         if(o != null && s != null){
+            if(o.getStatus() > 1 ){
+                throw  new OrderBadRequest("Vous ne pouvez plus ajouter de sandwich apre payement");
+            }
             o.addSandwich(s);
             return  this.em.merge(o);
         }else{
             throw  new OrderBadRequest("Mauvais id sandwich ou Mauvais id de commande");
         }
-
 
     }
 }
