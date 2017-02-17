@@ -12,6 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import entity.OrderSandwich;
+import entity.Sandwich;
 import exception.OrderBadRequest;
 import exception.OrderPayed;
 
@@ -132,19 +133,34 @@ public class OrderRepresentation {
     }
 
 
-    @Path("{idOrder}/sandwichs")
+    @Path("{idOrder}/addSandwich")
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     public Response addSandwich(@QueryParam("idSandwich") String idSandwich, @PathParam("idOrder") String idOrder){
-      try{
-          OrderSandwich o = this.orderRessource.addSandwich(idSandwich, idOrder);
-          return Response.ok(o, MediaType.APPLICATION_JSON).build();
-      }catch (OrderBadRequest e ){
-          JsonObjectBuilder insBuilder = Json.createObjectBuilder();
-          JsonObject errorJson = insBuilder
-                  .add("error", e.getMessage()).build();
-          return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
-      }
+        try{
+            OrderSandwich o = this.orderRessource.addSandwich(idSandwich, idOrder);
+            return Response.ok(o, MediaType.APPLICATION_JSON).build();
+        }catch (OrderBadRequest e ){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
+        }
+    }
+
+    @Path("{idOrder}/editSandwich")
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response editSandwich(@QueryParam("idSandwich") String idSandwich, @PathParam("idOrder") String idOrder, Sandwich s){
+        try{
+            OrderSandwich o = this.orderRessource.editSandwich(idSandwich, idOrder, s);
+            return Response.ok(o, MediaType.APPLICATION_JSON).build();
+        }catch (OrderBadRequest e ){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
+        }
     }
 
 }

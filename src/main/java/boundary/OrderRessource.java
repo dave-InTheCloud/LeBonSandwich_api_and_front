@@ -94,18 +94,43 @@ public class OrderRessource {
     }
 
 
-    public OrderSandwich addSandwich(String idSandwich, String idOrder) throws  OrderBadRequest{
-       OrderSandwich o =  this.em.find(OrderSandwich.class, idOrder);
-       Sandwich s = this.em.find(Sandwich.class, idSandwich);
-        if(o != null && s != null){
-            if(o.getStatus() > 1 ){
-                throw  new OrderBadRequest("Vous ne pouvez plus ajouter de sandwich apre payement");
+    public OrderSandwich addSandwich(String idSandwich, String idOrder) throws OrderBadRequest {
+        OrderSandwich o = this.em.find(OrderSandwich.class, idOrder);
+        Sandwich s = this.em.find(Sandwich.class, idSandwich);
+        if (o != null && s != null) {
+            if (o.getStatus() > 1) {
+                throw new OrderBadRequest("Vous ne pouvez plus ajouter de sandwich apres payement");
             }
             o.addSandwich(s);
-            return  this.em.merge(o);
-        }else{
-            throw  new OrderBadRequest("Mauvais id sandwich ou Mauvais id de commande");
+            return this.em.merge(o);
+        } else {
+            throw new OrderBadRequest("Mauvais id sandwich ou Mauvais id de commande");
+        }
+    }
+
+    public OrderSandwich editSandwich(String idSandwich, String idOrder, Sandwich s) throws OrderBadRequest {
+        OrderSandwich o = this.em.find(OrderSandwich.class, idOrder);
+        Sandwich res = this.em.find(Sandwich.class, idSandwich);
+        if (o != null && res != null) {
+            if (o.getStatus() > 1) {
+                if (res.getTaille() != s.getTaille()) {
+                    throw new OrderBadRequest("Vous ne pouvez plus modifier la taille apres payement");
+                } else {
+                    this.em.remove(res);
+                    this.em.merge(s);
+                    o.addSandwich(s);
+                    this.em.merge(o);
+                }
+            } else {
+                this.em.remove(res);
+                s.setId(UUID.randomUUID().toString());
+                o.addSandwich(s);
+                this.em.merge(o);
+            }
+        } else {
+            throw new OrderBadRequest("Mauvais id sandwich ou Mauvais id de commande");
         }
 
+        return o;
     }
 }
