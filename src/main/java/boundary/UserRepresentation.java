@@ -56,6 +56,16 @@ public class UserRepresentation {
      * Methode permettant de recuperer un utilisateur via son id
      * @param idUser id de l'utilisateur a recuperer
      * @return Reponse HTTP contenant l'utilisateur demandé 
+     * 
+     * @api {get} /users/:id Recuperation d'un utilisateur (admin)
+     * @apiName GetUser
+     * @apiGroup Users
+     * 
+     * @apiParam {String} :id id de l'utilisateur
+     * 
+     * @apiSuccess (200) {User} user   Utilisateur recupere
+     * @apiError (204) utilisateurInexistant  l'utilisateur n'existe pas
+     * @apiError (401) NonAutorise le token est invalide
      */
     @GET
     @Secured
@@ -72,6 +82,13 @@ public class UserRepresentation {
     /**
      * Methode permettant de recuperer la liste des utilisateurs de l'application
      * @return réponse contenant la liste des utilisateurs de l'application
+     * 
+     * @api {get} /users Recuperation de la liste des utilisateurs (admin)
+     * @apiName GetUsers
+     * @apiGroup Users
+     * 
+     * @apiSuccess (200) {ListUsers} users   Liste des users
+     * @apiError (401) NonAutorise le token est invalide
      */
     @GET
     @Secured
@@ -90,6 +107,21 @@ public class UserRepresentation {
      * @param user Utilisateur à ajouter
      * @param uriInfo 
      * @return Reponse contenant l'utilisateur ajouté
+     * 
+     * @api {post} /users Creation d'un utilisateur (admin)
+     * @apiName PostUser
+     * @apiGroup Users
+     * 
+     * @apiParam {String} name nom de l'utilisateur
+     * @apiParam {String} email mail de l'utilisateur
+     * @apiParam {String} password mot de passe de l'utilisateur
+     * 
+     * @apiSuccess (201) {User} user   Utilisateur cree
+     * @apiError (409) utilisateurDejaExistant un utilisateur avec cette adresse mail existe deja
+     * @apiError (400) nameManquant nom de l'utilisateur manquant
+     * @apiError (400) emailManquant email de l'utilisateur manquant
+     * @apiError (400) passwordManquant mot de passe manquant
+     * @apiError (401) NonAutorise le token est invalide
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -121,6 +153,16 @@ public class UserRepresentation {
      * @param user utilisateur a identifier
      * @param uriInfo
      * @return Reponse contenant le token d'identification dans le header
+     * 
+     * @api {POST} /users/signin Authentifie un utilisateur (admin)
+     * @apiName AuthUser
+     * @apiGroup Users
+     * 
+     * @apiParam {String} email email de l'utilisateur
+     * @apiParam {String} password mot de passe de l'utilisateur
+     * 
+     * @apiSuccess (200) {Token} token   Token d'authentification
+     * @apiError (401) NonAutorise les informations envoyees sont incorrectes
      */
     @POST
     @Path("/signin")
@@ -146,6 +188,20 @@ public class UserRepresentation {
      * @param idUser id de l'utilisateur a modifier
      * @param uriInfo 
      * @return Reponse contenant l'utilisateur modifié
+     * 
+     * @api {put} /users/:id Modification d'un utilisateur (admin)
+     * @apiName PutUser
+     * @apiGroup Users
+     * 
+     * @apiParam {String} :id id de l'utilisateur
+     * @apiParam {String} email email de l'utilisateur
+     * @apiParam {String} name nom de l'utilisateur
+     * @apiParam {String} password mot de passe de l'utilisateur
+     * 
+     * @apiSuccess (200) {User} user   Utilisateur modifie
+     * @apiSuccess (201) {User} user    Utilisateur cree
+     * @apiError (409) utilisateurDejaExistant  un utilisateur avec cette adresse mail existe deja
+     * @apiError (401) NonAutorise  Le token est invalide
      */
     @PUT
     @Secured
@@ -177,6 +233,16 @@ public class UserRepresentation {
      * Méthode permettant la suppression d'un utilisateur
      * @param id id de l'utilisateur a supprimer
      * @return Reponse avec un code 200 si le serveur a bien traité la requete
+     * 
+     * @api {delete} /users/:id Suppression d'un utilisateur (admin)
+     * @apiName DeleteUser
+     * @apiGroup Users
+     * 
+     * @apiParam {String} :id id de l'utilisateur
+     * 
+     * @apiSuccess (200) {null} null   L'Utilisateur a ete supprime
+     * @apiError (204) utilisateurInexistant  l'utilisateur n'existe pas
+     * @apiError (401) NonAutorise le token est invalide
      */
     @DELETE
     @Secured
