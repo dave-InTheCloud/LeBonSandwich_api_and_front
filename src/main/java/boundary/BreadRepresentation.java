@@ -42,6 +42,16 @@ public class BreadRepresentation {
      * @param bread pain a ajouter
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     * 
+     * @api {post} /breads Creation d'un nouveau pain
+     * @apiName PostPain
+     * @apiGroup Breads
+     * 
+     * @apiParam {String} name  nom du pain
+     * 
+     * @apiSuccess (201) {Bread} bread   Pain cree
+     * @apiError (400)  NomPainManquant   le nom du pain doit etre renseigne
+     * @apiError (401)  NonAutorise token d'authentification invalide
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -62,6 +72,17 @@ public class BreadRepresentation {
      * @param bread pain a modifier
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     * 
+     * @api {put} /breads/:id Modification d'un pain
+     * @apiName PutPain
+     * @apiGroup Breads
+     * 
+     * @apiParam {String} :id   id du pain
+     * @apiParam {String} name  nom du pain
+     * 
+     * @apiSuccess {Bread} bread   Pain modifie
+     * @apiError (400) NomPainManquant   le nom du pain doit etre renseigne
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @PUT
     @Path("/{id}")
@@ -86,6 +107,15 @@ public class BreadRepresentation {
      * Methode permettant d'obtenir les donnees d'un pain defini par son id
      * @param id identificateur du pain a obtenir
      * @return pain correspondant a l'id
+     * 
+     * @api {get} /breads/:id Recuperation d'un pain
+     * @apiName GetPain
+     * @apiGroup Breads
+     * 
+     * @apiParam {String} :id id du pain
+     * 
+     * @apiSuccess {Bread} bread   Pain recupere
+     * @apiSuccess (204) {null} null Aucun contenu
      */
     @GET
     @Path("{id}")
@@ -103,12 +133,18 @@ public class BreadRepresentation {
      * Methode permettant d'obtenir la liste de tous les pains
      * @param uriInfo
      * @return  reponse HTTP comportant la liste des pains
+     * 
+     * @api {get} /breads/ Recuperation de tous les pains
+     * @apiName GetPains
+     * @apiGroup Breads
+     * 
+     * @apiSuccess {ListBread} breads   Liste des pains
      */
     @GET
     public Response findAll(@Context UriInfo uriInfo){
         List<Bread> l = this.breadResource.findAll();
         GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
-        
+       
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
@@ -116,6 +152,16 @@ public class BreadRepresentation {
      * Methode permettant de supprimer un pain defini par son identificateur
      * @param id identificateur du pain a supprimer
      * @return reponse HTTP
+     * 
+     * @api {delete} /breads/:id Suppression d'un pain
+     * @apiName DeletePain
+     * @apiGroup Breads
+     * 
+     * @apiParam {String} :id id du pain
+     * 
+     * @apiSuccess null null    Le pain a ete supprime
+     * @apiError (204) PainInexistant   le pain a supprimer n'existe pas
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @DELETE
     @Path("{id}")

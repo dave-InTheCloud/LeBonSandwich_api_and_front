@@ -46,6 +46,18 @@ public class IngredientRepresentation {
      * @param ingredient ingredient a ajouter (binde avec une categorie)
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     * 
+     * @api {post} /ingredients/ Creation d'un ingredient
+     * @apiName PostIngredients
+     * @apiGroup Ingredients
+     * 
+     * @apiParam {String} idCateg id de la catégorie de l'ingredient
+     * @apiparam {String} nameIng nom de l'ingredient
+     * 
+     * @apiSuccess (201) {Ingredient} ingredient   Ingredient cree
+     * @apiError (400) idCateg   l'id de la categorie est manquant
+     * @apiError (400) nameIng   le nom de l'ingredient est manquant
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @POST
     @Path("/")
@@ -63,6 +75,12 @@ public class IngredientRepresentation {
     /**
      * Methode permettant de recuperer la liste de tous les Ingredients
      * @return reponse HTTP
+     * 
+     * @api {get} /ingredients/ Recuperation liste des ingredients
+     * @apiName GetIngredientsList
+     * @apiGroup Ingredients
+     * 
+     * @apiSuccess {ListIngredient} ingredients   Liste des ingredients
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -80,6 +98,15 @@ public class IngredientRepresentation {
      * Methode permettant de recuperer un ingredient a partir de son identificateur
      * @param id identificateur d'un ingredient
      * @return reponse HTTP comportant l'ingredient
+     * 
+     * @api {get} /ingredients/:id Recuperation d'un ingredient
+     * @apiName GetIngredient
+     * @apiGroup Ingredients
+     * 
+     * @apiParam {String} :id id de l'ingredient
+     * 
+     * @apiSuccess {Ingredient} ingredient   Ingredient recupere
+     * @apiError (204) IngredientInexistant   l'ingredient n'existe pas
      */
     @GET
     @Path("/{id}")
@@ -97,6 +124,15 @@ public class IngredientRepresentation {
      * Methode permettant de supprimer un ingredient a partir de son identificateur
      * @param id identificateur d'un ingredient
      * @return reponse HTTP
+     * 
+     * @api {delete} /ingredients/:id Suppression d'un ingredient
+     * @apiName DeleteIngredients
+     * @apiGroup Ingredients
+     * 
+     * @apiParam {String} :id id de l'ingredient a supprimer
+     * 
+     * @apiSuccess {null} null   Ingredient supprime
+     * @apiError (204) IngredientInexistant   l'ingredient n'existe pas
      */
     @DELETE
     @Path("{id}")
@@ -118,6 +154,20 @@ public class IngredientRepresentation {
      * @param ingredient ingredient a modifier
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     * 
+     * @api {put} /ingredients/:id Modification d'un ingredient
+     * @apiName PutIngredients
+     * @apiGroup Ingredients
+     * 
+     * @apiParam {String} :id id de l'ingredient
+     * @apiParam {String} idCateg id de la categorie
+     * @apiparam {String} nameIng nom de l'ingredient
+     * 
+     * @apiSuccess {Ingredient} ingredient   Ingredient modifie
+     * @apiSuccess (201) {Ingredient} ingredient    Ingredient cree
+     * @apiError (400) idCateg   l'id de la categorie est manquant
+     * @apiError (400) nameIng   le nom de l'ingredient est manquant
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @PUT
     @Path("/{id}")
@@ -145,6 +195,16 @@ public class IngredientRepresentation {
      * Methode permettant de recuperer la categorie associee a l'ingredient
      * @param id id de l'ingredient dont on souhaite recuperer la categorie
      * @return categorie associee
+     * 
+     * @api {get} /ingredients/:id/categories Recuperation de la categorie associee a un ingredient
+     * @apiName GetCategorieIngredient
+     * @apiGroup Ingredients
+     * 
+     * @apiParam {String} :id id de l'ingredient
+
+     * 
+     * @apiSuccess (200) {Category} category   Categorie associee a l'ingredient
+     * @apiError (204) IngredientInexistant   l'ingredient n'existe pas
      */
     @GET
     @Path("/{id}/categories")

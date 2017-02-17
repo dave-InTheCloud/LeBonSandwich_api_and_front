@@ -60,7 +60,7 @@ public class CategoryRessource {
      * @throws java.lang.Exception
      */
     public void delete(String id) throws Exception {
-        Category ref = this.em.getReference(Category.class, id);
+        Category ref = this.em.find(Category.class, id);
         
         if(ref == null)
             throw new Exception("La categorie recherchee n'a pas été trouvée.");

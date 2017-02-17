@@ -77,7 +77,7 @@ public class IngredientRessource {
      * @param id identificateur de l'ingredient a supprimer
      */
     public void delete(String id) throws Exception {
-        Ingredient ref = this.em.getReference(Ingredient.class, id);
+        Ingredient ref = this.em.find(Ingredient.class, id);
         
         if(ref == null)
             throw new Exception("L'ingredient n'a pas ete trouve.");
