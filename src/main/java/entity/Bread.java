@@ -22,51 +22,49 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Bread.findAll", query = "SELECT b FROM Bread b")
 })
 public class Bread implements Serializable {
-	private static final long serialVersionUID = 1L;
-
-	@Id
-	private String id;
-	private String name;
+    private static final long serialVersionUID = 1L;
+    
+    @Id
+    private String id;
+    private String name;
+    
+    @XmlElement(name= "_links")
+    @Transient
+    private List<Link> links = new ArrayList<>();
+    
+    public Bread(){
         
-        @XmlElement(name= "_links")
-        @Transient
-        private List<Link> links = new ArrayList<>();
-        
-        
-
-	public Bread(){
-
-	}
-
-	public Bread(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-
-        public void setId(String id) {
-		this.id = id;
-	}
-
-
-	public String getId() {
-		return this.id;
-	}
-
-        public List<Link> getLinks(){
-            return this.links;
-        }
-        
-        public void addLink(String uri, String rel) {
-            this.links.add(new Link(uri, rel));
-        }
-        
-        public String getSelfUri(UriInfo uriInfo) {
+    }
+    
+    public Bread(String name) {
+        this.name = name;
+    }
+    
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    public void setId(String id) {
+        this.id = id;
+    }
+    
+    
+    public String getId() {
+        return this.id;
+    }
+    
+    public List<Link> getLinks(){
+        return this.links;
+    }
+    
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(uri, rel));
+    }
+    
+    public String getSelfUri(UriInfo uriInfo) {
         return uriInfo.getBaseUriBuilder()
                 .path(BreadRepresentation.class)
                 .path(this.id)

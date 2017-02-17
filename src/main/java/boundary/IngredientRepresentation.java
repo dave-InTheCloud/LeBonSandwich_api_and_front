@@ -55,6 +55,7 @@ public class IngredientRepresentation {
         try {
             Ingredient i = this.ingredientResource.save(c);
             URI uri = uriInfo.getAbsolutePathBuilder().path(i.getId()).build();
+            this.createLinks(i, uriInfo);
             return Response.created(uri).entity(i).build();
         } catch(Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -67,8 +68,11 @@ public class IngredientRepresentation {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findAll() {
+    public Response findAll(@Context UriInfo uriInfo) {
         List<Ingredient> l = this.ingredientResource.findAll();
+        
+        for(Ingredient i : l)
+            this.createLinks(i, uriInfo);
         
         GenericEntity<List<Ingredient>> list = new GenericEntity<List<Ingredient>>(l) {
         };
@@ -85,12 +89,13 @@ public class IngredientRepresentation {
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findById(@PathParam("id") String id) {
+    public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
         Ingredient i = this.ingredientResource.findById(id);
         
         if(i == null)
             return Response.noContent().build();
-            
+        
+        this.createLinks(i, uriInfo);
         return Response.ok(i, MediaType.APPLICATION_JSON).build();
     }
     
@@ -105,9 +110,6 @@ public class IngredientRepresentation {
     public Response delete(@PathParam("id") String id) {
         try {
             this.ingredientResource.delete(id);
-            
-            System.out.println(id);
- 
             return Response.ok().build();
         } catch(Exception e) {
             return Response.noContent().build();
@@ -133,15 +135,23 @@ public class IngredientRepresentation {
                     .path(CategoryRepresentation.class)
                     .path(id)
                     .build();
-
+                Ingredient ingredientModifie = this.ingredientResource.findById(id);
                 if(this.ingredientResource.update(id, ingredient)) {
-                    Ingredient ingredientModifie = this.ingredientResource.findById(id);
+                    //this.createLinks(ingredientModifie, uriInfo);
                     return Response.created(uri).entity(ingredientModifie).build(); 
-                } else return Response.ok(uri).entity(ingredient).build();
+                } else{
+                    //this.createLinks(ingredientModifie, uriInfo);
+                    return Response.ok().entity(ingredientModifie).build();
+                }
             } catch(Exception e) {
                 return Response.status(Response.Status.BAD_REQUEST).build();
             }
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
+    
+    public void createLinks(Ingredient i, UriInfo uriInfo){
+        i.addLink(i.getSelfUri(uriInfo), "self");
+        i.addLink(i.getCategoryUri(uriInfo), "categories");
+    }
 }
