@@ -130,4 +130,27 @@ public class CategoryRepresentation {
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
 
+    /**
+     * Methode permettant de recuperer la liste des ingredients
+     * @param id id de la categorie dont on souhaite recuperer les ingredients
+     * @return liste des ingredients associes
+     */
+    @GET
+    @Path("/{id}/ingredients")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAssociatedIngredients(@PathParam("id") String id) {
+        Category c = this.categoryResource.findById(id);
+        
+        if(c != null) {
+            //On continue la recherche des ingredients
+            List<Ingredient> ingredients = c.getIngredients();
+            
+            if(ingredients.size() > 0)
+                return Response.ok(ingredients).build();
+            else
+                return Response.noContent().build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
 }

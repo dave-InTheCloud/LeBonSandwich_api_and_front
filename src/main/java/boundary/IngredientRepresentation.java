@@ -1,5 +1,6 @@
 package boundary;
 
+import entity.Category;
 import java.net.URI;
 import java.util.List;
 
@@ -140,4 +141,27 @@ public class IngredientRepresentation {
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
+    /**
+     * Methode permettant de recuperer la categorie associee a l'ingredient
+     * @param id id de l'ingredient dont on souhaite recuperer la categorie
+     * @return categorie associee
+     */
+    @GET
+    @Path("/{id}/categories")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAssociatedCategories(@PathParam("id") String id) {
+        Ingredient i = this.ingredientResource.findById(id);
+        
+        if(i != null) {
+            //On continue la recherche de la categorie
+            Category categorie = i.getCategory();
+            
+            if(categorie != null)
+                return Response.ok(categorie).build();
+            else
+                return Response.noContent().build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
 }

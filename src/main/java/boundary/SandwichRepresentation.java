@@ -1,5 +1,7 @@
 package boundary;
 
+import entity.Bread;
+import entity.Ingredient;
 import entity.Sandwich;
 import entity.SandwichBindIngredientsAndBread;
 import exception.SandwichBadRequest;
@@ -14,6 +16,8 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Representation d'une ressource Sandwich
@@ -22,10 +26,10 @@ import java.util.List;
 @Produces(MediaType.APPLICATION_JSON)
 @Stateless
 public class SandwichRepresentation {
-
+    
     @EJB
-    SandwichResource sandwichResource;
-
+            SandwichResource sandwichResource;
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo){
@@ -37,28 +41,28 @@ public class SandwichRepresentation {
             }else{
                 throw new BadRequestException("test");
             }
-
+            
         } catch (SandwichBadRequest e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
                     .add("error", e.getMessage()).build();
             return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
         }
-
+        
     }
-
+    
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id)   {
         try {
             Sandwich res = this.sandwichResource.update(s, id);
-
+            
             return Response.ok(res, MediaType.APPLICATION_JSON).build();
         } catch (SandwichNotFoundExeception e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder.add("error", e.getMessage()).build();
-
+            
             return Response.noContent().build();
         } catch (SandwichBadRequest e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
@@ -67,17 +71,17 @@ public class SandwichRepresentation {
             return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
         }
     }
-
-
+    
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
         try {
             List<Sandwich> l = this.sandwichResource.findAll();
-
+            
             GenericEntity<List<Sandwich>> list = new GenericEntity<List<Sandwich>>(l) {
             };
-
+            
             return Response.ok(list, MediaType.APPLICATION_JSON).build();
         }catch (NoContentException e){
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
@@ -86,8 +90,8 @@ public class SandwichRepresentation {
             return Response.noContent().entity(errorJson).build();
         }
     }
-
-
+    
+    
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("{id}")
@@ -102,13 +106,13 @@ public class SandwichRepresentation {
             return Response.noContent().entity(errorJson).build();
         }
     }
-
-
+    
+    
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response delete(@PathParam("id") String id) {
-
+        
         try {
             this.sandwichResource.delete(id);
             return Response.ok().build();
@@ -119,5 +123,52 @@ public class SandwichRepresentation {
             return Response.noContent().entity(errorJson).build();
         }
     }
-
+    
+    /**
+     * Methode permettant de recuperer le pain associe au sandwich
+     * @param id id du sandwich
+     * @return pain associe
+     */
+    @GET
+    @Path("/{id}/breads")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAssociatedBread(@PathParam("id") String id) {
+        try {
+            Sandwich s = this.sandwichResource.findById(id);
+            
+            //On continue la recherche de la categorie
+            Bread bread = s.getBread();
+            
+            if(bread != null)
+                return Response.ok(bread).build();
+            else
+                return Response.noContent().build();
+        } catch (SandwichNotFoundExeception ex) {
+            return Response.noContent().build();
+        }
+    }
+    
+    /**
+     * Methode permettant de recuperer la liste des ingredients associes au sandwich
+     * @param id id du sandwich
+     * @return liste des ingredients associes
+     */
+    @GET
+    @Path("/{id}/ingredients")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAssociatedIngredients(@PathParam("id") String id) {
+        try {
+            Sandwich s = this.sandwichResource.findById(id);
+            
+            //On continue la recherche de la categorie
+            List<Ingredient> ingredients = s.getIngredients();
+            
+            if(ingredients.size() > 0)
+                return Response.ok(ingredients).build();
+            else
+                return Response.noContent().build();
+        } catch (SandwichNotFoundExeception ex) {
+            return Response.noContent().build();
+        }
+    }
 }
