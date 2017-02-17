@@ -25,7 +25,7 @@ import static org.junit.Assert.*;
  *
  * @author maxime
  */
-public class IngredientRessource {
+public class IngredientTest {
     
     private Client client;
     private WebTarget target;

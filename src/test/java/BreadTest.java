@@ -1,8 +1,8 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+* To change this license header, choose License Headers in Project Properties.
+* To change this template file, choose Tools | Templates
+* and open the template in the editor.
+*/
 
 import javax.json.Json;
 import javax.json.JsonArray;
@@ -59,27 +59,47 @@ public class BreadTest {
                 .post(Entity.json(jsonCreate));
         this.token = postReponse.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0).toString();
     }
-
+    
     @Test
-    public void testBread(){
+    public void testCreate(){
         JsonObjectBuilder insBuilder = Json.createObjectBuilder();
         JsonObject jsonCreate = insBuilder
                 .add("name","test").build();
         
-
-        
         //creation
         Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
         assertThat(postReponse.getStatus(),is(201));
+    }
+    
+    @Test
+    public void testFind(){
+        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+        JsonObject jsonCreate = insBuilder
+                .add("name","test").build();
         
-
+        //creation
+        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
+        
         String location = postReponse.getHeaderString("location");
-        System.out.println("location : "+location);
         
         // find
         JsonObject getReponse = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         assertTrue(getReponse.getString("name").contains("test"));
+    }
+    
+    @Test
+    public void testUpdate(){
+        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+        JsonObject jsonCreate = insBuilder
+                .add("name","test").build();
         
+        //creation
+        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
+        
+        String location = postReponse.getHeaderString("location");
+        
+        // find
+        JsonObject getReponse = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         String Id=getReponse.getString("id");
         
         //edition
@@ -93,18 +113,43 @@ public class BreadTest {
         //verification
         JsonObject getReponseVerif = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
         assertTrue(getReponseVerif.getString("name").contains("test2"));
+    }
+    
+    @Test
+    public void testFindAll(){
+        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+        JsonObject jsonCreate = insBuilder
+                .add("name","test").build();
         
+        //creation
+        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
+        
+        String location = postReponse.getHeaderString("location");
         
         //find all
         Response findAllReponse = this.target.request(MediaType.APPLICATION_JSON).get();
         assertThat(findAllReponse.getStatus(),is(200));
         JsonArray all = findAllReponse.readEntity(JsonArray.class);
         assertFalse(all.isEmpty());
+    }
+    
+    @Test
+       public void testDelete(){
+        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+        JsonObject jsonCreate = insBuilder
+                .add("name","test").build();
         
+        //creation
+        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
+        
+        String location = postReponse.getHeaderString("location");
+        JsonObject getReponse = this.client.target(location).request(MediaType.APPLICATION_JSON).get(JsonObject.class);
+        String id=getReponse.getString("id");
+           
         //delete
-         Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).delete();
+        Response deleteReponse = this.target.path(id).request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).delete();
         assertThat(deleteReponse.getStatus(),is(200));
         
     }
-   
+    
 }
