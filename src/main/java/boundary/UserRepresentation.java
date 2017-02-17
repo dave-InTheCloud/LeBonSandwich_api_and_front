@@ -61,10 +61,12 @@ public class UserRepresentation {
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{idUser}")
-    public Response findUser(@PathParam("idUser") String idUser){
+    public Response findUser(@PathParam("idUser") String idUser, @Context UriInfo uriInfo){
         User u = this.userRessource.findById(idUser);
-        if(u != null)
+        if(u != null){
+            u.addLink(u.getSelfUri(uriInfo), "self");
             return Response.ok(u).build();
+        }
         else
             return Response.status(Response.Status.NO_CONTENT).build();
     }
@@ -76,9 +78,11 @@ public class UserRepresentation {
     @GET
     @Secured
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findUsers(){
+    public Response findUsers(@Context UriInfo uriInfo){
         try {
             List<User> users = this.userRessource.findAll();
+            for(User u : users)
+                u.addLink(u.getSelfUri(uriInfo), "self");
             return Response.ok(users, MediaType.APPLICATION_JSON).build();
         } catch (NoResultException ex) {
             return Response.noContent().build();
@@ -102,6 +106,7 @@ public class UserRepresentation {
                     .path(u.getId())
                     .build();
             
+            u.addLink(u.getSelfUri(uriInfo), "self");
             return Response.created(uri).entity(u).build();
         } catch (AlreadyExistException e){
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
@@ -133,7 +138,8 @@ public class UserRepresentation {
             
             // On fournit un token
             String token = "Bearer "+issueToken(u.getName(), uriInfo);
-            return Response.ok().header(AUTHORIZATION, token).build();
+            u.addLink(u.getSelfUri(uriInfo), "self");
+            return Response.ok().entity(u).header(AUTHORIZATION, token).build();
             
         } catch (Exception e) {
             return Response.status(Response.Status.UNAUTHORIZED).build();
@@ -160,10 +166,14 @@ public class UserRepresentation {
                     .path(UserRepresentation.class)
                     .path(user.getId())
                     .build();
-            if(user.getId().equals(idUser))
+            if(user.getId().equals(idUser)){
+                user.addLink(user.getSelfUri(uriInfo), "self");
                 return Response.ok(uri).entity(user).build();
-            else
-                return Response.created(uri).entity(user).build();
+            }
+            else{
+                user.addLink(user.getSelfUri(uriInfo), "self");
+                return Response.created(uri).entity(user).build();   
+            }
         } catch (AlreadyExistException e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
