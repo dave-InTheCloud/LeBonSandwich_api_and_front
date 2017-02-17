@@ -46,6 +46,7 @@ public class CategoryRepresentation {
             Category c = this.categoryResource.save(categ);
             URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
 
+            this.createLinks(c, uriInfo);
             return Response.created(uri).entity(c).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
@@ -59,8 +60,12 @@ public class CategoryRepresentation {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response findAll() {
+    public Response findAll(@Context UriInfo uriInfo) {
         List<Category> l = this.categoryResource.findAll();
+        
+        for(Category c : l)
+            this.createLinks(c, uriInfo);
+        
         GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {
         };
 
@@ -79,8 +84,10 @@ public class CategoryRepresentation {
     public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
         Category c = this.categoryResource.findById(id);
 
-        if (c != null)
+        if (c != null){
+            this.createLinks(c, uriInfo);
             return Response.ok(c, MediaType.APPLICATION_JSON).build();
+        }
         else
             return Response.noContent().build();
     }
@@ -128,6 +135,11 @@ public class CategoryRepresentation {
             else
                 return Response.ok(uri).entity(category).build();
         } else return Response.status(Response.Status.BAD_REQUEST).build();
+    }
+    
+     public void createLinks(Category c, UriInfo uriInfo){
+        c.addLink(c.getSelfUri(uriInfo), "self");
+        c.addLink(c.getIngredientUri(uriInfo), "ingredients");
     }
 
 }
