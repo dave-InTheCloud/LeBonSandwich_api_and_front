@@ -12,6 +12,7 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -24,15 +25,39 @@ import static org.junit.Assert.*;
  *
  * @author maxime
  */
-public class BreadRessource {
+public class BreadTest {
     
     private Client client;
     private WebTarget target;
+    private String token;
     
     @Before
     public void initClient(){
         this.client = ClientBuilder.newClient();
         this.target = this.client.target("http://localhost:8080/LeBonSandwich/api/breads");
+    }
+    
+    @Before
+    public void initToken(){
+        String baseUri = "http://localhost:8080/LeBonSandwich/api/users";
+        JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+        JsonObject jsonCreate = insBuilder
+                .add("name","test")
+                .add("email", "test@test.fr")
+                .add("password", "test")
+                .build();
+        Response postReponse = this.client.target(baseUri)
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(jsonCreate));
+        
+        jsonCreate = insBuilder
+                .add("email", "test@test.fr")
+                .add("password", "test")
+                .build();
+        postReponse = this.client.target(baseUri+"/signin")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(jsonCreate));
+        this.token = postReponse.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0).toString();
     }
 
     @Test
@@ -44,7 +69,7 @@ public class BreadRessource {
 
         
         //creation
-        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).post(Entity.json(jsonCreate));
+        Response postReponse = this.target.request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).post(Entity.json(jsonCreate));
         assertThat(postReponse.getStatus(),is(201));
         
 
@@ -61,7 +86,7 @@ public class BreadRessource {
         JsonObject jsonEdit = insBuilder
                 .add("name","test2").build();
         
-        Response editReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).put(Entity.json(jsonEdit));
+        Response editReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).put(Entity.json(jsonEdit));
         assertThat(editReponse.getStatus(),is(200));
         
         
@@ -77,7 +102,7 @@ public class BreadRessource {
         assertFalse(all.isEmpty());
         
         //delete
-         Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).delete();
+         Response deleteReponse = this.target.path(Id).request(MediaType.APPLICATION_JSON).header(HttpHeaders.AUTHORIZATION, this.token).delete();
         assertThat(deleteReponse.getStatus(),is(200));
         
     }
