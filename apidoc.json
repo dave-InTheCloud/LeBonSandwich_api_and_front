@@ -1,0 +1,7 @@
+{
+  "name": "LeBonSandwich API",
+  "version": "1.0.0",
+  "description": "API RESTFul permettant de gérer une sandwicherie.",
+  "title": "LeBonSandwich API - Documentation",
+  "url": "http://localhost:8080/LeBonSandwich/api"
+}
