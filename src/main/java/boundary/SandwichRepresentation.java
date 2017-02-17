@@ -46,6 +46,7 @@ public class SandwichRepresentation {
      * @apiError (400) idBreadManquant  id du pain manquant
      * @apiError (400) tailleManquant   la taille du sandwich est manquante
      * @apiError (400) idIngredientsManquant la liste des ingredients est manquante
+     * @apiError (400) nombreIngredientsIncorrect le nombre d'ingredients est incorrect vis a vis de la taille du sandwich
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
@@ -87,6 +88,7 @@ public class SandwichRepresentation {
      * @apiError (400) idBreadManquant  id du pain manquant
      * @apiError (400) tailleManquant   la taille du sandwich est manquante
      * @apiError (400) idIngredientsManquant la liste des ingredients est manquante
+     * @apiError (400) nombreIngredientsIncorrect le nombre d'ingredients est incorrect vis a vis de la taille du sandwich
      * @apiError (204) sandwichInexistant le sandwich n'existe pas
      */
     @PUT
