@@ -7,11 +7,8 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
 
 import entity.Category;
 import entity.Ingredient;
@@ -33,7 +30,7 @@ public class CategoryRessource {
      * @param categ categorie a enregistrer
      * @return categorie enregistree
      */
-    public Category save(Category categ) throws Exception {
+    public Category save(Category categ) throws Exception { 
         if(categ.getName() != null) {
             Category c = new Category(categ.getName(), new ArrayList<Ingredient>(), categ.getLimiteNbIngredient());
             c.setId(UUID.randomUUID().toString());
@@ -60,7 +57,7 @@ public class CategoryRessource {
      * @throws java.lang.Exception
      */
     public void delete(String id) throws Exception {
-        Category ref = this.em.getReference(Category.class, id);
+        Category ref = this.em.find(Category.class, id);
         
         if(ref == null)
             throw new Exception("La categorie recherchee n'a pas été trouvée.");
