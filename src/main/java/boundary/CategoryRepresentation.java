@@ -24,13 +24,13 @@ import provider.Secured;
 @Consumes(MediaType.APPLICATION_JSON)
 @Stateless
 public class CategoryRepresentation {
-
+    
     /**
      * Ressource des categories
      */
     @EJB
     private CategoryRessource categoryResource;
-
+    
     /**
      * Methode permettant d'ajouter une categorie d'ingredient
      *
@@ -45,14 +45,14 @@ public class CategoryRepresentation {
         try {
             Category c = this.categoryResource.save(categ);
             URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
-
+            
             this.createLinks(c, uriInfo);
             return Response.created(uri).entity(c).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
     }
-
+    
     /**
      * Methode permettant de recuperer toutes les categories d'ingredients
      *
@@ -68,10 +68,10 @@ public class CategoryRepresentation {
         
         GenericEntity<List<Category>> list = new GenericEntity<List<Category>>(l) {
         };
-
+        
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
-
+    
     /**
      * Methode permettant de recuperer une categorie d'ingredient definie par son identificateur
      *
@@ -83,7 +83,7 @@ public class CategoryRepresentation {
     @Path("/{id}")
     public Response findById(@PathParam("id") String id, @Context UriInfo uriInfo) {
         Category c = this.categoryResource.findById(id);
-
+        
         if (c != null){
             this.createLinks(c, uriInfo);
             return Response.ok(c, MediaType.APPLICATION_JSON).build();
@@ -91,7 +91,7 @@ public class CategoryRepresentation {
         else
             return Response.noContent().build();
     }
-
+    
     /**
      * Methode permettant de supprimer une categorie d'ingredients
      *
@@ -104,13 +104,13 @@ public class CategoryRepresentation {
     public Response deleteCategory(@PathParam("categId") String id) {
         try {
             this.categoryResource.delete(id);
-
+            
             return Response.ok().build();
         } catch (Exception e) {
             return Response.noContent().build();
         }
     }
-
+    
     /**
      * Methode permettant de mettre a jour une categorie (methode HTTP: PUT)
      * @id id de la categorie a modifier
@@ -126,20 +126,24 @@ public class CategoryRepresentation {
         if(category.getName() != null) {
             category.setId(id);
             URI uri = uriInfo.getBaseUriBuilder()
-                .path(CategoryRepresentation.class)
-                .path(id)
-                .build();
+                    .path(CategoryRepresentation.class)
+                    .path(id)
+                    .build();
             
-            if(this.categoryResource.update(id, category))
+            if(this.categoryResource.update(id, category)){
+                this.createLinks(category, uriInfo);
                 return Response.created(uri).entity(category).build();
-            else
+            }
+            else{
+                this.createLinks(category, uriInfo);
                 return Response.ok(uri).entity(category).build();
+            }
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
-     public void createLinks(Category c, UriInfo uriInfo){
+    public void createLinks(Category c, UriInfo uriInfo){
         c.addLink(c.getSelfUri(uriInfo), "self");
         c.addLink(c.getIngredientUri(uriInfo), "ingredients");
     }
-
+    
 }
