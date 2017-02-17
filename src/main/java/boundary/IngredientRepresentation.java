@@ -21,6 +21,7 @@ import javax.ws.rs.core.UriInfo;
 
 import entity.CategoryBindIngredient;
 import entity.Ingredient;
+import provider.Secured;
 
 /**
  * Representation d'un Ingredient
@@ -48,6 +49,7 @@ public class IngredientRepresentation {
      */
     @POST
     @Path("/")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addIngredient(CategoryBindIngredient c, @Context UriInfo uriInfo) {
         try {
@@ -98,6 +100,7 @@ public class IngredientRepresentation {
      * @return reponse HTTP
      */
     @DELETE
+    @Secured
     @Path("{id}")
     public Response delete(@PathParam("id") String id) {
         try {
@@ -119,6 +122,7 @@ public class IngredientRepresentation {
      * @return reponse HTTP
      */
     @PUT
+    @Secured
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateIngredient(@PathParam("id") String id, CategoryBindIngredient ingredient, @Context UriInfo uriInfo){

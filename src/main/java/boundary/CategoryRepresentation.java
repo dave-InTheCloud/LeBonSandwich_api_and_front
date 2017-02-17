@@ -2,7 +2,6 @@
 package boundary;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -15,9 +14,7 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
 import entity.Category;
-import entity.Ingredient;
-
-import javax.persistence.EntityNotFoundException;
+import provider.Secured;
 
 /**
  * Representation d'une Categorie d'Ingredient
@@ -42,6 +39,7 @@ public class CategoryRepresentation {
      * @return reponse HTTP
      */
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addCategory(Category categ, @Context UriInfo uriInfo) {
         try {
@@ -94,6 +92,7 @@ public class CategoryRepresentation {
      * @return reponse HTTP
      */
     @DELETE
+    @Secured
     @Path("/{categId}")
     public Response deleteCategory(@PathParam("categId") String id) {
         try {
@@ -113,6 +112,7 @@ public class CategoryRepresentation {
      * @return reponse HTTP
      */
     @PUT
+    @Secured
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") String id, Category category, @Context UriInfo uriInfo){

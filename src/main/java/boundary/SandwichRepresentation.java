@@ -14,6 +14,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
+import provider.Secured;
 
 /**
  * Representation d'une ressource Sandwich
@@ -27,6 +28,7 @@ public class SandwichRepresentation {
     SandwichResource sandwichResource;
 
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo){
         try {
@@ -48,6 +50,7 @@ public class SandwichRepresentation {
     }
 
     @PUT
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
     public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id)   {
@@ -105,6 +108,7 @@ public class SandwichRepresentation {
 
 
     @DELETE
+    @Secured
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     public Response delete(@PathParam("id") String id) {

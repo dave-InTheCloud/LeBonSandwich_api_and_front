@@ -2,12 +2,10 @@ package boundary;
 
 import entity.Bread;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -16,12 +14,12 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import provider.Secured;
 
 /**
  * Representation des Pains
@@ -44,6 +42,7 @@ public class BreadRepresentation {
      * @return reponse HTTP
      */
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response addBread(Bread bread, @Context UriInfo uriInfo){
         if(bread.getName() != null) {
@@ -65,6 +64,7 @@ public class BreadRepresentation {
      */
     @PUT
     @Path("/{id}")
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     public Response updateBread(@PathParam("id") String id, Bread bread, @Context UriInfo uriInfo){
         if(bread.getName() != null) {
@@ -119,6 +119,7 @@ public class BreadRepresentation {
      */
     @DELETE
     @Path("{id}")
+    @Secured
     public Response delete(@PathParam("id") String id){
         try {
             this.breadResource.delete(id);
