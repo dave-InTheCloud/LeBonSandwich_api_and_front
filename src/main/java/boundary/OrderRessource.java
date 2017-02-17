@@ -88,5 +88,12 @@ public class OrderRessource {
             throw (new NoContentException("Pas de commandes pour le moment"));
         }
     }
-    
+
+    public void delete(String id) throws  NoContentException {
+        OrderSandwich res = this.em.find(OrderSandwich.class, id);
+        if(res == null){
+            throw  new NoContentException("id de sandwich non existant");
+        }
+        this.em.remove(res);
+    }
 }

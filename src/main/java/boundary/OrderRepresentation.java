@@ -94,4 +94,21 @@ public class OrderRepresentation {
     }
 
 
+    @DELETE
+    @Path("{id}")
+    public  Response finById(@PathParam("id") String id){
+        try {
+            this.orderRessource.delete(id);
+            return Response.ok().build();
+        } catch (NoContentException e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.noContent().entity(errorJson).build();
+        }
+
+    }
+
+
+
 }
