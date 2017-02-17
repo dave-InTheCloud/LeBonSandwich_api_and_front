@@ -24,34 +24,63 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Bread implements Serializable {
     private static final long serialVersionUID = 1L;
     
-    @Id
-    private String id;
-    private String name;
-    
     @XmlElement(name= "_links")
     @Transient
     private List<Link> links = new ArrayList<>();
     
+    /**
+     * Id d'un pain
+     */
+    @Id
+    private String id;
+    
+    /**
+     * Nom d'un pain
+     */
+    private String name;
+    
+    /**
+     * Constructeur vide
+     */
     public Bread(){
         
     }
     
+    /**
+     * Constructeur
+     * @param name nom du pain
+     */
     public Bread(String name) {
         this.name = name;
     }
     
+    /**
+     * Methode permettant de recuperer le nom du pain
+     */
     public String getName() {
         return name;
     }
+    
+    /**
+     * Methode permettant de definir le nom du pain
+     * @param name nom du pain
+     */
     public void setName(String name) {
         this.name = name;
     }
     
+    /**
+     * Methode permettant de definir un id
+     * @param id id du pain
+     */
     public void setId(String id) {
         this.id = id;
     }
     
-    
+    /**
+     * Methode permettant d'obtenir un id
+     * @return id du pain
+     */
     public String getId() {
         return this.id;
     }

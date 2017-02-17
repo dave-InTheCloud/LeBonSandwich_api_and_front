@@ -1,13 +1,10 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @XmlRootElement
 public class CategoryBindIngredient {
-    
     private String idCateg, nameIng, id;
     
     public CategoryBindIngredient(){
@@ -41,8 +38,4 @@ public class CategoryBindIngredient {
     public void setNameIng(String nameIng) {
         this.nameIng = nameIng;
     }
-    
-    
-    
-    
 }

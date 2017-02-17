@@ -48,7 +48,6 @@ public class User {
     @XmlElement(name= "_links")
     @Transient
     private List<Link> links = new ArrayList<>();
-    
     /**
      * Constructeur vide d'un utilisateur
      */

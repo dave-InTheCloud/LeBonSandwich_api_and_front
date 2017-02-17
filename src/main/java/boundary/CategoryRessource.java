@@ -22,8 +22,8 @@ public class CategoryRessource {
      * EntityManager
      */
     @PersistenceContext
-    EntityManager em;
-
+            EntityManager em;
+    
     /**
      * Methode permettant d'enregistrer une categorie d'ingredients
      *
@@ -35,9 +35,9 @@ public class CategoryRessource {
             Category c = new Category(categ.getName(), new ArrayList<Ingredient>(), categ.getLimiteNbIngredient());
             c.setId(UUID.randomUUID().toString());
             return this.em.merge(c);
-        } else throw new Exception("Donnees manquantes"); 
+        } else throw new Exception("Donnees manquantes");
     }
-
+    
     /**
      * Methode permettant de recuperer toutes les categories d'ingredients
      *
@@ -49,7 +49,7 @@ public class CategoryRessource {
         q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
         return q.getResultList();
     }
-
+    
     /**
      * Methode permettant de supprimer une categorie d'ingredients
      *
@@ -64,7 +64,7 @@ public class CategoryRessource {
         
         this.em.remove(ref);
     }
-
+    
     /**
      * Methode permettant de recuperer une categorie
      *
@@ -74,7 +74,7 @@ public class CategoryRessource {
     public Category findById(String id) {
         return this.em.find(Category.class, id);
     }
-
+    
     /**
      * Methode permettant de mettre a jour une categorie
      * @param id identificateur du pain

@@ -15,6 +15,8 @@ import javax.ws.rs.core.UriInfo;
 
 import entity.Category;
 import provider.Secured;
+import entity.Ingredient;
+
 
 /**
  * Representation d'une Categorie d'Ingredient
@@ -37,6 +39,17 @@ public class CategoryRepresentation {
      * @param categ   categorie d'ingredient a ajouter
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     *
+     * @api {post} /categories/ Creation d'une categorie
+     * @apiName PostCategories
+     * @apiGroup Categories
+     *
+     * @apiParam {String} name nom de la catégorie
+     * @apiparam {Number} limiteNbIngredient limite de ce type d'ingredient par commande
+     *
+     * @apiSuccess (201) {Category} category   Categorie creee
+     * @apiError (400) NomCategorieManquant   le nom de la categorie est manquant
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @POST
     @Secured
@@ -45,7 +58,6 @@ public class CategoryRepresentation {
         try {
             Category c = this.categoryResource.save(categ);
             URI uri = uriInfo.getAbsolutePathBuilder().path(c.getId()).build();
-            
             this.createLinks(c, uriInfo);
             return Response.created(uri).entity(c).build();
         } catch (Exception e) {
@@ -57,6 +69,12 @@ public class CategoryRepresentation {
      * Methode permettant de recuperer toutes les categories d'ingredients
      *
      * @return reponse HTTP comportant la liste des categories
+     *
+     * @api {get} /categories/ Recuperation Liste des categories
+     * @apiName GetCategories
+     * @apiGroup Categories
+     *
+     * @apiSuccess {ListCategory} categories   Liste des categories
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -78,6 +96,15 @@ public class CategoryRepresentation {
      * @param id      identificateur de la categorie d'ingredient
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP comportant la categorie d'ingredient
+     *
+     * @api {get} /categories/:id Recuperation d'une categorie
+     * @apiName GetCategory
+     * @apiGroup Categories
+     *
+     * @apiParam {String} :id id de la catégorie
+     *
+     * @apiSuccess {Category} category   Categorie recuperee
+     * @apiError (204) CategorieInexistance la categorie n'existe pas
      */
     @GET
     @Path("/{id}")
@@ -97,6 +124,16 @@ public class CategoryRepresentation {
      *
      * @param id identificateur de la categorie a supprimer
      * @return reponse HTTP
+     *
+     * @api {delete} /categories/:id Suppression d'une categorie
+     * @apiName DeleteCategories
+     * @apiGroup Categories
+     *
+     * @apiParam {String} :id id de la categorie
+     *
+     * @apiSuccess {null} null   Categorie supprimee
+     * @apiError (401) NonAutorise  token d'authentification invalide
+     * @apiError (204) CategorieInexistante la categorie a supprimer n'existe pas
      */
     @DELETE
     @Secured
@@ -117,6 +154,19 @@ public class CategoryRepresentation {
      * @param category categorie a modifier
      * @param uriInfo informations sur l'URI
      * @return reponse HTTP
+     *
+     * @api {put} /categories/:id Modification d'une categorie
+     * @apiName PutCategories
+     * @apiGroup Categories
+     *
+     * @apiParam {String} :id id de la categorie
+     * @apiParam {String} name nom de la catégorie
+     * @apiparam {Number} limiteNbIngredient limite de ce type d'ingredient par commande
+     *
+     * @apiSuccess {Category} category   Categorie modifiee
+     * @apiSuccess (201) {Category} category Categorie creee
+     * @apiError (400) NomCategorieManquant   le nom de la categorie est manquant
+     * @apiError (401) NonAutorise  token d'authentification invalide
      */
     @PUT
     @Secured
@@ -146,4 +196,36 @@ public class CategoryRepresentation {
         c.addLink(c.getIngredientUri(uriInfo), "ingredients");
     }
     
+    /**
+     * Methode permettant de recuperer la liste des ingredients
+     * @param id id de la categorie dont on souhaite recuperer les ingredients
+     * @return liste des ingredients associes
+     *
+     * @api {get} /categories/:id/ingredients Recuperation des ingredients associes a une categorie
+     * @apiName GetIngredientsCategories
+     * @apiGroup Categories
+     *
+     * @apiParam {String} :id id de la catégorie
+     *
+     * @apiSuccess {ListIngredients} ingredients   Liste des ingredients associes
+     * @apiError (204) IngredientsInexistants   aucun ingredient n'est associe a la categorie
+     */
+    @GET
+    @Path("/{id}/ingredients")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getAssociatedIngredients(@PathParam("id") String id) {
+        Category c = this.categoryResource.findById(id);
+        
+        if(c != null) {
+            //On continue la recherche des ingredients
+            List<Ingredient> ingredients = c.getIngredients();
+            
+            if(ingredients.size() > 0)
+                return Response.ok(ingredients).build();
+            else
+                return Response.noContent().build();
+        } else {
+            return Response.noContent().build();
+        }
+    }
 }
