@@ -6,7 +6,6 @@ import entity.Sandwich;
 import entity.SandwichBindIngredientsAndBread;
 import exception.SandwichBadRequest;
 import exception.SandwichNotFoundExeception;
-
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.json.Json;
@@ -52,16 +51,11 @@ public class SandwichRepresentation {
     @POST
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo){
+    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo) {
         try {
-            if (s.getIdIngredients() != null && s.getIdBread() != null){
-                Sandwich res = sandwichResource.create(s);
-                URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
-                return Response.created(uri).entity(res).build();
-            }else{
-                throw new BadRequestException("test");
-            }
-            
+            Sandwich res = sandwichResource.create(s);
+            URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
+            return Response.created(uri).entity(res).build();
         } catch (SandwichBadRequest e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
@@ -97,7 +91,7 @@ public class SandwichRepresentation {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id)   {
+    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id) {
         try {
             Sandwich res = this.sandwichResource.update(s, id);
             
@@ -136,7 +130,7 @@ public class SandwichRepresentation {
             };
             
             return Response.ok(list, MediaType.APPLICATION_JSON).build();
-        }catch (NoContentException e){
+        } catch (NoContentException e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
                     .add("error", e.getMessage()).build();

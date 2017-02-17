@@ -1,154 +1,86 @@
 package entity;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrderSandwich.findAll", query = "SELECT s FROM OrderSandwich s")
+        @NamedQuery(name = "Order.findAll", query = "SELECT s FROM OrderSandwich s")
 })
-public class OrderSandwich implements Serializable{
-    private static final long serialVersionUID = 1L;
-    
-    /**
-     * Id d'une commande
-     */
+
+public class OrderSandwich implements Serializable {
+
+    public final static int PAYER = 1;
+    public final static int FABRICATION = 2;
+    public final static int FINI = 3;
+
     @Id
     private String id;
-    
-    /**
-     * Date de la commande
-     */
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt", nullable = false)
-    private java.util.Date createdAt = new Date();
-    
-    /**
-     * Booleen indiquant si la commande a ete payee
-     */
-    private Boolean payed=false;
-    
-    /**
-     * Booleen indiquant si la commande est terminees
-     */
-    private Boolean finished = false;
-    
-    /**
-     * Sandwichs composant la commande
-     */
-    //@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
-    //@JsonManagedReference
-    private ArrayList<Sandwich>sandwichs;
-    
-    /**
-     * Constructeur vide
-     */
-    public OrderSandwich(){
-        this.sandwichs = new ArrayList<Sandwich>();
+
+
+    //@Temporal(TemporalType.TIME)
+    //@Column(name = "dateEnvoie", nullable = true)
+    private String dateEnvoie;
+
+
+    private int status;
+
+    //@OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "orderSandwich")
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Sandwich> sandwichs;
+
+    public OrderSandwich() {
     }
-    
-    /**
-     * Constructeur
-     * @param sandwichs sandwichs de la commande
-     */
-    public OrderSandwich(ArrayList<Sandwich> sandwichs) {
-        this.sandwichs = sandwichs;
+
+    public OrderSandwich(String dateEnvoie) {
+        this.sandwichs = new HashSet<Sandwich>();
+        this.status = 0;
+        this.dateEnvoie = dateEnvoie;
     }
-    
-    /**
-     * Methode permettant d'obtenir un id de commande
-     * @return id de la commande
-     */
+
+
     public String getId() {
         return id;
     }
-    
-    /**
-     * Methode permettant de definir un id de commande
-     * @param id id de la commande
-     */
+
+
     public void setId(String id) {
         this.id = id;
     }
-    
-    /**
-     * Methode permettant d'obtenir la date de commande
-     * @return date de commande
-     */
-    public Date getCreatedAt() {
-        return createdAt;
+
+    public String getDateEnvoie() {
+        return dateEnvoie;
     }
-    
-    /**
-     * Methode permettant de definir la date de commande
-     * @param createdAt date de commande
-     */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+
+    public void setDateEnvoie(String dateEnvoie) {
+        this.dateEnvoie = dateEnvoie;
     }
-    
-    /**
-     * Methode permettant d'obtenir le statut du paiement de commande
-     * @return paiement de la commande
-     */
-    public Boolean getPayed() {
-        return payed;
-    }
-    
-    /**
-     * Methode permettant de definir la statut de paiement de la commande
-     * @param payed statut de paiement
-     */
-    public void setPayed(Boolean payed) {
-        this.payed = payed;
-    }
-    
-    /**
-     * Methode permettant d'obtenir le statut d'avancement de la commande
-     * @return statut d'avancement de la commande
-     */
-    public Boolean getFinished() {
-        return finished;
-    }
-    
-    /**
-     * Methode permettant de definir le statut d'avancement de la commande
-     * @param finished statut d'avancement de la commande
-     */
-    public void setFinished(Boolean finished) {
-        this.finished = finished;
-    }
-    
-    /**
-     * Methode permettant d'obtenir la liste des sandwichs de la commande
-     * @return liste des sandwichs de la commande
-     */
-    public List<Sandwich> getSandwichs() {
+
+    public Set<Sandwich> getSandwichs() {
         return sandwichs;
     }
-    
-    /**
-     * Methode permettant de definir la liste des sandwichs de la commande
-     * @param sandwichs liste des sandwichs de la commande
-     */
-    public void setSandwichs(ArrayList<Sandwich> sandwichs) {
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public void setSandwichs(Set<Sandwich> sandwichs) {
         this.sandwichs = sandwichs;
     }
-    
-    
-    public static long getSerialversionuid() {
-        return serialVersionUID;
-    }
+
+    public void addSandwich(Sandwich s){ this.sandwichs.add(s);}
+
 }
