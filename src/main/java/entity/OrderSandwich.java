@@ -3,6 +3,7 @@ package entity;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -39,8 +40,8 @@ public class OrderSandwich implements Serializable {
     public OrderSandwich() {
     }
 
-    public OrderSandwich(Set<Sandwich> s, String dateEnvoie) {
-        this.sandwichs = s;
+    public OrderSandwich(String dateEnvoie) {
+        this.sandwichs = new HashSet<Sandwich>();
         this.status = 0;
         this.dateEnvoie = dateEnvoie;
     }
@@ -79,5 +80,6 @@ public class OrderSandwich implements Serializable {
         this.sandwichs = sandwichs;
     }
 
+    public void addSandwich(Sandwich s){ this.sandwichs.add(s);}
 
 }

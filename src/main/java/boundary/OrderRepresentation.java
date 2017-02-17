@@ -12,9 +12,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 
 import entity.OrderSandwich;
-import entity.OrderBindSandwich;
 import exception.OrderBadRequest;
-import exception.OrderNotFound;
 import exception.OrderPayed;
 
 /**
@@ -37,7 +35,7 @@ public class OrderRepresentation {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response save(OrderBindSandwich o, @Context UriInfo uriInfo) {
+    public Response save(OrderSandwich o, @Context UriInfo uriInfo) {
         try {
             OrderSandwich res = this.orderRessource.save(o);
             URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
@@ -112,27 +110,7 @@ public class OrderRepresentation {
     }
 
 
-    @PUT
-    @Path("{id}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response update(OrderBindSandwich o,@PathParam("id") String id){
-        try {
-            OrderSandwich res = this.orderRessource.update(o, id);
 
-            return Response.ok(res, MediaType.APPLICATION_JSON).build();
-        } catch (OrderBadRequest e) {
-            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
-            JsonObject errorJson = insBuilder
-                    .add("error", e.getMessage()).build();
-            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
-        }catch (OrderNotFound e){
-            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
-            JsonObject errorJson = insBuilder
-                    .add("error", e.getMessage()).build();
-            return Response.noContent().entity(errorJson).build();
-        }
-
-    }
 
     @POST
     @Path("{id}/pay")
@@ -154,5 +132,19 @@ public class OrderRepresentation {
     }
 
 
+    @Path("{idOrder}/sandwichs")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response addSandwich(@QueryParam("idSandwich") String idSandwich, @PathParam("idOrder") String idOrder){
+      try{
+          OrderSandwich o = this.orderRessource.addSandwich(idSandwich, idOrder);
+          return Response.ok(o, MediaType.APPLICATION_JSON).build();
+      }catch (OrderBadRequest e ){
+          JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+          JsonObject errorJson = insBuilder
+                  .add("error", e.getMessage()).build();
+          return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
+      }
+    }
 
 }

@@ -9,12 +9,9 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.ws.rs.core.NoContentException;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import entity.OrderSandwich;
-import entity.OrderBindSandwich;
 import entity.Sandwich;
 import exception.OrderBadRequest;
-import exception.OrderNotFound;
 import exception.OrderPayed;
 
 /**
@@ -30,126 +27,82 @@ public class OrderRessource {
 
     /**
      * Methode permettant d'enregistrer une commande
+     *
      * @return commande enregistree
      */
-    public OrderSandwich save(OrderBindSandwich o) throws  OrderBadRequest{
-
-        Set<Sandwich> listSandwich = new HashSet<Sandwich>();
-        List<String> idSandwichs = o.getIdSandwichs();
-
-        for (int i=0; i< idSandwichs.size(); i++){
-            if(idSandwichs.get(i) != null){
-                Sandwich val = this.em.find(Sandwich.class,idSandwichs.get(i));
-                listSandwich.add(val);
-            }else{
-                throw new OrderBadRequest("Un id de sandwich introuvable");
-            }
-        }
+    public OrderSandwich save(OrderSandwich o) throws OrderBadRequest {
 
         String dateEnvoie;
-        if(o.getDateEnvoie() != null){
-           dateEnvoie = o.getDateEnvoie();
-        }else{
-            throw  new OrderBadRequest("Date invalide");
-        }
+        if (o.getDateEnvoie() != null) {
+            dateEnvoie = o.getDateEnvoie();
+            o.setId(UUID.randomUUID().toString());
 
-
-        if (listSandwich.size()> 0) {
-            OrderSandwich orderSandwich = new OrderSandwich();
-            orderSandwich.setSandwichs(listSandwich);
-            orderSandwich.setDateEnvoie(dateEnvoie);
-            orderSandwich.setId(UUID.randomUUID().toString());
-            return this.em.merge(orderSandwich);
-        }else{
-            throw new OrderBadRequest("List sandwich invalide");
+            return this.em.merge(o);
+        } else {
+            throw new OrderBadRequest("Date invalide");
         }
 
     }
 
     /**
      * Methode permettant de recuperer la liste des commandes
+     *
      * @return liste des commandes
      */
     public List<OrderSandwich> findAll() throws NoContentException {
         Query q = this.em.createNamedQuery("Order.findAll", OrderSandwich.class);
         // pour éviter les pbs de cache
         q.setHint("javax.persistence.cache.storeMode", CacheStoreMode.REFRESH);
-        List<OrderSandwich> res =  q.getResultList();
-        if(res.size() != 0){
+        List<OrderSandwich> res = q.getResultList();
+        if (res.size() != 0) {
             return res;
-        }else{
+        } else {
             throw (new NoContentException("Pas de commandes pour le moment"));
         }
     }
 
 
-    public OrderSandwich findById(String id) throws NoContentException{
+    public OrderSandwich findById(String id) throws NoContentException {
         OrderSandwich res = this.em.find(OrderSandwich.class, id);
-        if (res != null){
+        if (res != null) {
             return res;
-        }else {
+        } else {
             throw (new NoContentException("Pas de commandes pour le moment"));
         }
     }
 
-    public void delete(String id) throws  NoContentException {
+    public void delete(String id) throws NoContentException {
         OrderSandwich res = this.em.find(OrderSandwich.class, id);
-        if(res == null){
-            throw  new NoContentException("id de sandwich non existant");
+        if (res == null) {
+            throw new NoContentException("id de sandwich non existant");
         }
         this.em.remove(res);
     }
 
-    public OrderSandwich update(OrderBindSandwich o, String id) throws OrderNotFound, OrderBadRequest {
-        OrderSandwich res = this.em.find(OrderSandwich.class, id);
-        if(res == null){
-            throw  new OrderNotFound("Aucune commmande avec cette id trouve");
-        }
-
-        Set<Sandwich> listSandwich = new HashSet<Sandwich>();
-        List<String> idSandwichs = o.getIdSandwichs();
-
-        for (int i=0; i< idSandwichs.size(); i++){
-            if(idSandwichs.get(i) != null){
-                Sandwich val = this.em.find(Sandwich.class,idSandwichs.get(i));
-                listSandwich.add(val);
-            }else{
-                throw new OrderBadRequest("Un id de sandwich introuvable");
+    public void pay(String id) throws NoContentException, OrderPayed {
+        OrderSandwich o = this.em.find(OrderSandwich.class, id);
+        if (o != null) {
+            if (o.getStatus() != OrderSandwich.PAYER) {
+                o.setStatus(OrderSandwich.PAYER);
+            } else {
+                throw new OrderPayed("Commande deja paye");
             }
+        } else {
+            throw new NoContentException("Aucune commande avec cette id");
         }
-
-
-        String dateEnvoie;
-        if(o.getDateEnvoie() != null){
-            dateEnvoie = o.getDateEnvoie();
-        }else{
-            throw  new OrderBadRequest("Date invalide");
-        }
-
-
-        if (listSandwich.size()> 0) {
-            OrderSandwich orderSandwich = new OrderSandwich();
-            orderSandwich.setSandwichs(listSandwich);
-            orderSandwich.setDateEnvoie(dateEnvoie);
-            orderSandwich.setId(UUID.randomUUID().toString());
-            return this.em.merge(orderSandwich);
-        }else{
-            throw new OrderBadRequest("List sandwich invalide");
-        }
-
     }
 
 
-    public void pay(String id) throws NoContentException, OrderPayed {
-        OrderSandwich o = this.em.find(OrderSandwich.class, id);
-        if (o != null){
-            if(o.getStatus() != OrderSandwich.PAYER) {
-                o.setStatus(OrderSandwich.PAYER);
-            }else{
-                throw  new OrderPayed("Commande deja paye");
-            }
+    public OrderSandwich addSandwich(String idSandwich, String idOrder) throws  OrderBadRequest{
+       OrderSandwich o =  this.em.find(OrderSandwich.class, idOrder);
+       Sandwich s = this.em.find(Sandwich.class, idSandwich);
+        if(o != null && s != null){
+            o.addSandwich(s);
+            return  this.em.merge(o);
         }else{
-            throw  new NoContentException("Aucune commande avec cette id");
+            throw  new OrderBadRequest("Mauvais id sandwich ou Mauvais id de commande");
         }
+
+
     }
 }
