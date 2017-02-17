@@ -1,5 +1,7 @@
 package entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,21 +9,18 @@ import java.util.List;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-
 @Entity
 @XmlRootElement
 @NamedQueries({
 		@NamedQuery(name = "Sandwich.findAll", query = "SELECT i FROM Sandwich i")
 })
 public class Sandwich implements Serializable  {
+	public static final long serialVersionUID = 1L;
+
 	public final static int PETIT_FAIM =  4;
 	public final static int MOYENNE_FAIM = 5;
 	public final static int GROSSE_FIN =  6;
 	public final static int OGRE = 7;
-	public static final long serialVersionUID = 1L;
 
 	@Id
 	private String id;
@@ -33,6 +32,10 @@ public class Sandwich implements Serializable  {
 	@ManyToMany(fetch = FetchType.EAGER)
 	//@JsonManagedReference
 	private List<Ingredient>ingredients;
+
+	@ManyToOne
+	@JsonBackReference
+	OrderSandwich orderSandwich;
 
 	public int taille;
 
@@ -78,5 +81,13 @@ public class Sandwich implements Serializable  {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public OrderSandwich getOrderSandwich() {
+		return orderSandwich;
+	}
+
+	public void setOrderSandwich(OrderSandwich orderSandwich) {
+		this.orderSandwich = orderSandwich;
 	}
 }

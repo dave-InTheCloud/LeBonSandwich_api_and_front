@@ -1,107 +1,83 @@
 package entity;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import java.io.Serializable;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 
 
 @Entity
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrderSandwich.findAll", query = "SELECT s FROM OrderSandwich s")
+        @NamedQuery(name = "Order.findAll", query = "SELECT s FROM OrderSandwich s")
 })
-public class OrderSandwich implements Serializable{
-	private static final long serialVersionUID = 1L;
-	
-	@Id 
-	private String id;
-	
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "createdAt", nullable = false)
-	private java.util.Date createdAt = new Date();
-	private Boolean payed=false;
-	private Boolean finished = false;
-	
-	
-	//@ManyToMany(cascade = CascadeType.ALL, mappedBy = "id")
-	//@JsonManagedReference
-	private ArrayList<Sandwich>sandwichs;
+public class OrderSandwich implements Serializable {
 
-	public OrderSandwich(){
-		this.sandwichs = new ArrayList<Sandwich>(); 
-	}
-	
-	public OrderSandwich(ArrayList<Sandwich> sandwichs) {
-		this.sandwichs = sandwichs;
-	}
+    public final static int PAYER = 1;
+    public final static int FABRICATION = 2;
+    public final static int FINI = 3;
+
+    @Id
+    private String id;
 
 
-	public String getId() {
-		return id;
-	}
+    //@Temporal(TemporalType.TIME)
+    //@Column(name = "dateEnvoie", nullable = true)
+    private String dateEnvoie;
 
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    private int status;
+
+    //@OneToMany(fetch = FetchType.EAGER, orphanRemoval = true, mappedBy = "orderSandwich")
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<Sandwich> sandwichs;
+
+    public OrderSandwich() {
+    }
+
+    public OrderSandwich(Set<Sandwich> s, String dateEnvoie) {
+        this.sandwichs = s;
+        this.status = 0;
+        this.dateEnvoie = dateEnvoie;
+    }
 
 
-	public Date getCreatedAt() {
-		return createdAt;
-	}
+    public String getId() {
+        return id;
+    }
 
 
-	public void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
+    public String getDateEnvoie() {
+        return dateEnvoie;
+    }
 
-	public Boolean getPayed() {
-		return payed;
-	}
+    public void setDateEnvoie(String dateEnvoie) {
+        this.dateEnvoie = dateEnvoie;
+    }
 
+    public Set<Sandwich> getSandwichs() {
+        return sandwichs;
+    }
 
-	public void setPayed(Boolean payed) {
-		this.payed = payed;
-	}
+    public int getStatus() {
+        return status;
+    }
 
+    public void setStatus(int status) {
+        this.status = status;
+    }
 
-	public Boolean getFinished() {
-		return finished;
-	}
+    public void setSandwichs(Set<Sandwich> sandwichs) {
+        this.sandwichs = sandwichs;
+    }
 
-
-	public void setFinished(Boolean finished) {
-		this.finished = finished;
-	}
-
-
-	public List<Sandwich> getSandwichs() {
-		return sandwichs;
-	}
-
-
-	public void setSandwichs(ArrayList<Sandwich> sandwichs) {
-		this.sandwichs = sandwichs;
-	}
-
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
-	
-	
-	
 
 }

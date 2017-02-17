@@ -28,15 +28,11 @@ public class SandwichRepresentation {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo){
+    public Response create(SandwichBindIngredientsAndBread s, @Context UriInfo uriInfo) {
         try {
-            if (s.getIdIngredients() != null && s.getIdBread() != null){
-                Sandwich res = sandwichResource.create(s);
-                URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
-                return Response.created(uri).entity(res).build();
-            }else{
-                throw new BadRequestException("test");
-            }
+            Sandwich res = sandwichResource.create(s);
+            URI uri = uriInfo.getAbsolutePathBuilder().path(res.getId()).build();
+            return Response.created(uri).entity(res).build();
 
         } catch (SandwichBadRequest e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
@@ -50,7 +46,7 @@ public class SandwichRepresentation {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id)   {
+    public Response update(SandwichBindIngredientsAndBread s, @PathParam("id") String id) {
         try {
             Sandwich res = this.sandwichResource.update(s, id);
 
@@ -79,7 +75,7 @@ public class SandwichRepresentation {
             };
 
             return Response.ok(list, MediaType.APPLICATION_JSON).build();
-        }catch (NoContentException e){
+        } catch (NoContentException e) {
             JsonObjectBuilder insBuilder = Json.createObjectBuilder();
             JsonObject errorJson = insBuilder
                     .add("error", e.getMessage()).build();
