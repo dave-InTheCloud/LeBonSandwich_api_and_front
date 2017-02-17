@@ -14,6 +14,7 @@ import javax.ws.rs.core.*;
 import entity.OrderSandwich;
 import entity.OrderBindSandwich;
 import exception.OrderBadRequest;
+import exception.OrderNotFound;
 
 /**
  * Representation d'une ressource OrderSandwich
@@ -105,6 +106,29 @@ public class OrderRepresentation {
             JsonObject errorJson = insBuilder
                     .add("error", e.getMessage()).build();
             return Response.noContent().entity(errorJson).build();
+        }
+
+    }
+
+
+    @PUT
+    @Path("{id}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response update(OrderBindSandwich o,@PathParam("id") String id){
+        try {
+            OrderSandwich res = this.orderRessource.update(o, id);
+
+            return Response.ok(res, MediaType.APPLICATION_JSON).build();
+        } catch (OrderBadRequest e) {
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorJson).build();
+        }catch (OrderNotFound e){
+            JsonObjectBuilder insBuilder = Json.createObjectBuilder();
+            JsonObject errorJson = insBuilder
+                    .add("error", e.getMessage()).build();
+            return Response.status(Response.Status.NOT_FOUND).entity(errorJson).build();
         }
 
     }
