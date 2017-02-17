@@ -1,5 +1,6 @@
 package entity;
 
+import boundary.BreadRepresentation;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Transient;
+import javax.ws.rs.core.UriInfo;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -64,4 +66,11 @@ public class Bread implements Serializable {
             this.links.add(new Link(uri, rel));
         }
         
+        public String getSelfUri(UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder()
+                .path(BreadRepresentation.class)
+                .path(this.id)
+                .build()
+                .toString();
+    }
 }

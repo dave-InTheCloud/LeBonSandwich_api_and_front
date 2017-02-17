@@ -50,7 +50,7 @@ public class BreadRepresentation {
             URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
 
             System.out.println("[POST]Enregistrement d'un nouveau Pain");
-            b.addLink(this.getSelfUri(uriInfo, b), "self");
+            b.addLink(b.getSelfUri(uriInfo), "self");
 
             return Response.created(uri).entity(b).build();
         } else return Response.status(Response.Status.BAD_REQUEST).build();
@@ -76,11 +76,11 @@ public class BreadRepresentation {
                 .build();
             
             if(this.breadResource.update(id, bread)){
-               bread.addLink(this.getSelfUri(uriInfo, bread), "self");
+               bread.addLink(bread.getSelfUri(uriInfo), "self");
                 return Response.created(uri).entity(bread).build();
             }
             else{
-                bread.addLink(this.getSelfUri(uriInfo, bread), "self");
+                bread.addLink(bread.getSelfUri(uriInfo), "self");
                 return Response.ok(uri).entity(bread).build();
             }
         } else return Response.status(Response.Status.BAD_REQUEST).build();
@@ -101,7 +101,7 @@ public class BreadRepresentation {
         if(bread == null)
             return Response.noContent().build();
 
-        bread.addLink(this.getSelfUri(uriInfo, bread), "self");
+        bread.addLink(bread.getSelfUri(uriInfo), "self");
         
         return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
@@ -116,7 +116,7 @@ public class BreadRepresentation {
         List<Bread> l = this.breadResource.findAll();
         
         for(Bread b : l){
-            b.addLink(this.getSelfUri(uriInfo, b), "self");
+            b.addLink(b.getSelfUri(uriInfo), "self");
         }
         
         GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
@@ -129,7 +129,7 @@ public class BreadRepresentation {
      * @return reponse HTTP
      */
     @DELETE
-    @Path("{id}")
+    @Path("{id}") 
     @Secured
     public Response delete(@PathParam("id") String id){
         try {
@@ -139,13 +139,5 @@ public class BreadRepresentation {
         } catch(Exception e) {
             return Response.noContent().build();
         }
-    }
-
-    private String getSelfUri(UriInfo uriInfo, Bread b) {
-        return uriInfo.getBaseUriBuilder()
-                .path(BreadRepresentation.class)
-                .path(b.getId())
-                .build()
-                .toString();
     }
 }
