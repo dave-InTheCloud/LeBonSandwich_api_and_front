@@ -2,6 +2,7 @@ package entity;
 
 import boundary.CategoryRepresentation;
 import boundary.IngredientRepresentation;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,6 @@ public class Category implements Serializable {
     
     
     @OneToMany(orphanRemoval = true, mappedBy = "category", fetch = FetchType.EAGER)
-    @JsonManagedReference
     private List<Ingredient>ingredients;
     
     public Category(){
@@ -62,7 +62,7 @@ public class Category implements Serializable {
         this.name = name;
     }
     
-    
+    @JsonIgnore
     public List<Ingredient> getIngredients() {
         return ingredients;
     }
