@@ -1,5 +1,7 @@
 package entity;
 
+import boundary.CategoryRepresentation;
+import boundary.IngredientRepresentation;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -11,6 +13,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.Transient;
+import javax.ws.rs.core.UriInfo;
+import javax.xml.bind.annotation.XmlElement;
 
 
 @Entity
@@ -29,6 +36,10 @@ public class Ingredient implements Serializable{
     @ManyToOne
     @JsonBackReference
     private Category category;
+    
+    @XmlElement(name= "_links")
+    @Transient
+    private List<Link> links = new ArrayList<>();
     
     public Ingredient(){
         
@@ -67,5 +78,29 @@ public class Ingredient implements Serializable{
         this.id = id;
     }
     
+    public List<Link> getLinks(){
+        return this.links;
+    }
+    
+    public void addLink(String uri, String rel) {
+        this.links.add(new Link(uri, rel));
+    }
+    
+    public String getSelfUri(UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder()
+                .path(IngredientRepresentation.class)
+                .path(this.id)
+                .build()
+                .toString();
+    }
+
+    public String getCategoryUri(UriInfo uriInfo) {
+        return uriInfo.getBaseUriBuilder()
+                .path(IngredientRepresentation.class)
+                .path(this.id)
+                .path(CategoryRepresentation.class)
+                .build()
+                .toString();
+    }
     
 }
