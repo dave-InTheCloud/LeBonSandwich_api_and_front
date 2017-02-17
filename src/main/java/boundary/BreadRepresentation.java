@@ -50,6 +50,7 @@ public class BreadRepresentation {
             URI uri = uriInfo.getAbsolutePathBuilder().path(b.getId()).build();
 
             System.out.println("[POST]Enregistrement d'un nouveau Pain");
+            b.addLink(this.getSelfUri(uriInfo, b), "self");
 
             return Response.created(uri).entity(b).build();
         } else return Response.status(Response.Status.BAD_REQUEST).build();
@@ -90,12 +91,14 @@ public class BreadRepresentation {
     @GET
     @Path("{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response find(@PathParam("id") String id){
+    public Response find(@PathParam("id") String id, @Context UriInfo uriInfo){
         Bread bread = this.breadResource.findById(id);
         
         if(bread == null)
             return Response.noContent().build();
 
+        bread.addLink(this.getSelfUri(uriInfo, bread), "self");
+        
         return Response.ok(bread, MediaType.APPLICATION_JSON).build();
     }
     
@@ -107,8 +110,12 @@ public class BreadRepresentation {
     @GET
     public Response findAll(@Context UriInfo uriInfo){
         List<Bread> l = this.breadResource.findAll();
-        GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
         
+        for(Bread b : l){
+            b.addLink(this.getSelfUri(uriInfo, b), "self");
+        }
+        
+        GenericEntity<List<Bread>> list = new GenericEntity<List<Bread>>(l) {};
         return Response.ok(list, MediaType.APPLICATION_JSON).build();
     }
     
@@ -128,5 +135,13 @@ public class BreadRepresentation {
         } catch(Exception e) {
             return Response.noContent().build();
         }
+    }
+
+    private String getSelfUri(UriInfo uriInfo, Bread b) {
+        return uriInfo.getBaseUriBuilder()
+                .path(BreadRepresentation.class)
+                .path(b.getId())
+                .build()
+                .toString();
     }
 }

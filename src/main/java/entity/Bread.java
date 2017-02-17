@@ -2,11 +2,15 @@ package entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.Transient;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
@@ -21,7 +25,12 @@ public class Bread implements Serializable {
 	@Id
 	private String id;
 	private String name;
-
+        
+        @XmlElement(name= "_links")
+        @Transient
+        private List<Link> links = new ArrayList<>();
+        
+        
 
 	public Bread(){
 
@@ -47,4 +56,12 @@ public class Bread implements Serializable {
 		return this.id;
 	}
 
+        public List<Link> getLinks(){
+            return this.links;
+        }
+        
+        public void addLink(String uri, String rel) {
+            this.links.add(new Link(uri, rel));
+        }
+        
 }
