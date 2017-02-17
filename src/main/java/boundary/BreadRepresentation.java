@@ -81,6 +81,7 @@ public class BreadRepresentation {
      * @apiParam {String} name  nom du pain
      * 
      * @apiSuccess {Bread} bread   Pain modifie
+     * @apiSuccess (201) {Bread} bread  Pain cree
      * @apiError (400) NomPainManquant   le nom du pain doit etre renseigne
      * @apiError (401) NonAutorise  token d'authentification invalide
      */
@@ -159,7 +160,7 @@ public class BreadRepresentation {
      * 
      * @apiParam {String} :id id du pain
      * 
-     * @apiSuccess null null    Le pain a ete supprime
+     * @apiSuccess {null} null    Le pain a ete supprime
      * @apiError (204) PainInexistant   le pain a supprimer n'existe pas
      * @apiError (401) NonAutorise  token d'authentification invalide
      */
