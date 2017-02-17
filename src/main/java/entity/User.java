@@ -20,7 +20,7 @@ import org.mindrot.jbcrypt.BCrypt;
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u where u.email =:email")
 })
 public class User {
-
+    
     /**
      * Id de l'utilisateur
      */
@@ -39,7 +39,7 @@ public class User {
      * Mot de passe de l'utilisateur
      */
     private String password;
-
+    
     /**
      * Constructeur vide d'un utilisateur
      */
@@ -63,7 +63,7 @@ public class User {
             this.name = user.name;
         }
     }
-
+    
     /**
      * getter du nom
      * @return nom de l'utilisateur
@@ -71,7 +71,7 @@ public class User {
     public String getName() {
         return name;
     }
-
+    
     /**
      * Setter du nom
      * @param name nom a donner
@@ -82,7 +82,7 @@ public class User {
             this.name = name;
         else throw new Exception("Name invalide");
     }
-
+    
     /**
      * Getter de l'email
      * @return email
@@ -90,22 +90,22 @@ public class User {
     public String getEmail() {
         return email;
     }
-
+    
     /**
      * Setter de l'email
      * @param email
-     * @throws Exception 
+     * @throws Exception
      */
     public void setEmail(String email) throws Exception {
         if(!email.equals(""))
             this.email = email;
         else throw new Exception("Email invalide");
     }
-
+    
     /**
      * Setter du mot de passe
      * @param password
-     * @throws Exception 
+     * @throws Exception
      */
     public void setPassword(String password) throws Exception {
         if(!password.equals(""))
@@ -115,22 +115,22 @@ public class User {
     
     /**
      * Getter de l'id
-     * @return 
+     * @return
      */
     public String getId() {
         return id;
     }
-
+    
     /**
      * Setter de l'id
-     * @param id 
+     * @param id
      */
     public void setId(String id) {
         this.id = id;
     }
-
+    
     /**
-     * Méthode permettant de verifier les identifiant d'un utilisateur 
+     * Méthode permettant de verifier les identifiant d'un utilisateur
      * lors de l'authentification
      * @param user utilisateur a authentifier
      */
@@ -138,7 +138,7 @@ public class User {
         if(!(this.email.equals(user.email) && BCrypt.checkpw(user.password, this.password)))
             throw new NotAuthorizedException("Problème d'authentification");
     }
-
+    
     /**
      * Méthode permettant d'hasher un mot de passe
      */
