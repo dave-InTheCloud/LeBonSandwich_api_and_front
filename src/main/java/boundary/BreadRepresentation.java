@@ -75,10 +75,14 @@ public class BreadRepresentation {
                 .path(bread.getId())
                 .build();
             
-            if(this.breadResource.update(id, bread))
+            if(this.breadResource.update(id, bread)){
+               bread.addLink(this.getSelfUri(uriInfo, bread), "self");
                 return Response.created(uri).entity(bread).build();
-            else
+            }
+            else{
+                bread.addLink(this.getSelfUri(uriInfo, bread), "self");
                 return Response.ok(uri).entity(bread).build();
+            }
         } else return Response.status(Response.Status.BAD_REQUEST).build();
     }
     
