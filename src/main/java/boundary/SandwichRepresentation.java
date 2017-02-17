@@ -16,8 +16,6 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.net.URI;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Representation d'une ressource Sandwich
@@ -35,15 +33,15 @@ public class SandwichRepresentation {
      * @param s sandwich a creer
      * @param uriInfo contexte sur l'uri
      * @return reponse HTTP avec le sandwich
-     * 
+     *
      * @api {post} /sandwichs/ Creation d'un sandwich
      * @apiName PostSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiParam {String} idBread id du pain du sandwich
      * @apiParam {Number} taille taille du sandwich
      * @apiParam {ListIdIngredients} idIngredients liste des id des ingredients qui composent le sandwich
-     * 
+     *
      * @apiSuccess (201) {Sandwich} sandwich   Sandwich cree
      * @apiError (400) idBreadManquant  id du pain manquant
      * @apiError (400) tailleManquant   la taille du sandwich est manquante
@@ -75,16 +73,16 @@ public class SandwichRepresentation {
      * @param s sandwich mis a jour
      * @param id id du sandwich a modifier
      * @return reponse HTTP - sandwich modifie
-     * 
+     *
      * @api {put} /sandwichs/:id Modification d'un sandwich
      * @apiName PutSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiparam {String} :id id du sandwich a modifier
      * @apiParam {String} idBread id du pain du sandwich
      * @apiParam {Number} taille taille du sandwich
      * @apiParam {ListIdIngredients} idIngredients liste des id des ingredients qui composent le sandwich
-     * 
+     *
      * @apiSuccess (200) {Sandwich} sandwich   Sandwich cree
      * @apiError (400) idBreadManquant  id du pain manquant
      * @apiError (400) tailleManquant   la taille du sandwich est manquante
@@ -115,11 +113,11 @@ public class SandwichRepresentation {
     /**
      * Methode permettant de recuperer la liste des sandwichs
      * @return reponse HTTP - liste des sandwichs
-     * 
+     *
      * @api {get} /sandwichs/ Recuperation liste des sandwichs
      * @apiName GetListSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiSuccess (200) {ListSandwich} listSandwich   Liste des sandwichs
      * @apiError (204) SandwichsManquants  aucun sandwich enregistre
      */
@@ -145,13 +143,13 @@ public class SandwichRepresentation {
      * Methode permettant de recuperer un sandwich
      * @param id id du sandwich a recuperer
      * @return reponse HTTP - sandwich recupere
-     * 
+     *
      * @api {get} /sandwichs/:id Recuperation d'un sandwich
      * @apiName GetSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiParam {String} :id id du sandwich
-     * 
+     *
      * @apiSuccess (200) {Sandwich} sandwich   Sandwich recupere
      * @apiError (204) sandwichInexistant  le sandwich n'existe pas
      */
@@ -174,13 +172,13 @@ public class SandwichRepresentation {
      * Methode permettant de supprimer un sandwich
      * @param id id du sandwich a supprimer
      * @return reponse HTTP
-     * 
+     *
      * @api {delete} /sandwichs/:id Suppresion d'un sandwich
      * @apiName DeleteSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiParam {String} :id id du sandwich a supprimer
-     * 
+     *
      * @apiSuccess (200) {null} null   Sandwich supprime
      * @apiError (204) sandwichInexistant  le sandwich n'existe pas
      */
@@ -204,13 +202,13 @@ public class SandwichRepresentation {
      * Methode permettant de recuperer le pain associe au sandwich
      * @param id id du sandwich
      * @return pain associe
-     * 
+     *
      * @api {get} /sandwichs/:id/breads Recuperation pain associe au sandwich
      * @apiName GetBreadSandwichs
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiParam {String} :id id du sandwich
-     * 
+     *
      * @apiSuccess (200) {Bread} bread   Pain du sandwich
      * @apiError (204) SandwichInexistant  Le sandwich n'existe pas
      */
@@ -237,13 +235,13 @@ public class SandwichRepresentation {
      * Methode permettant de recuperer la liste des ingredients associes au sandwich
      * @param id id du sandwich
      * @return liste des ingredients associes
-     * 
+     *
      * @api {get} /sandwichs/:id/ingredients Recuperation liste des ingredients associes au sandwich
      * @apiName GetIngredientsSandwich
      * @apiGroup Sandwichs
-     * 
+     *
      * @apiParam {String} :id id du sandwich
-     * 
+     *
      * @apiSuccess (200) {ListIngredients} listIngredients   Liste des ingredients qui composent le sandwich
      * @apiError (204) SandwichInexistant  le sandwich n'existe pas
      */

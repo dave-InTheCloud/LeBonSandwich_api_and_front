@@ -6,7 +6,6 @@ import java.util.UUID;
 import javax.ejb.Stateless;
 import javax.persistence.CacheStoreMode;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityNotFoundException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -19,7 +18,7 @@ import entity.Ingredient;
  */
 @Stateless // gestion transactionelle (plusieurs users en m�me temps)
 public class IngredientRessource {
-
+    
     /**
      * EntityManager
      */
@@ -81,7 +80,7 @@ public class IngredientRessource {
         
         if(ref == null)
             throw new Exception("L'ingredient n'a pas ete trouve.");
-            
+        
         this.em.remove(ref);
     }
     
@@ -115,7 +114,7 @@ public class IngredientRessource {
                 return false;
             }
         }
-                
+        
         this.em.merge(ref);
         
         return created;

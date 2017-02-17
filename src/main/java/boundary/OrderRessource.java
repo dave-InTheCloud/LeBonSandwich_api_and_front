@@ -10,7 +10,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 import entity.OrderSandwich;
-import entity.Sandwich;
 
 /**
  * Ressource d'une commande
@@ -21,11 +20,11 @@ public class OrderRessource {
      * EntityManager
      */
     @PersistenceContext
-    EntityManager em;
+            EntityManager em;
     
     /**
      * Methode permettant d'enregistrer une commande
-     * @return commande enregistree 
+     * @return commande enregistree
      */
     public OrderSandwich save(){
         OrderSandwich order = new OrderSandwich();

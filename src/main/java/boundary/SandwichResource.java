@@ -8,10 +8,8 @@ import exception.SandwichBadRequest;
 import exception.SandwichNotFoundExeception;
 
 import javax.ejb.Stateless;
-import javax.jms.Session;
 import javax.persistence.*;
 import javax.ws.rs.BadRequestException;
-import javax.ws.rs.NotFoundException;
 import javax.ws.rs.core.NoContentException;
 import java.util.ArrayList;
 import java.util.List;
