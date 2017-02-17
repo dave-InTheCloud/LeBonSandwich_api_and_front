@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-import entity.Category;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;

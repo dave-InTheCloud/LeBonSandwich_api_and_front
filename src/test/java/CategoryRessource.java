@@ -4,9 +4,6 @@
  * and open the template in the editor.
  */
 
-import entity.Ingredient;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
@@ -19,10 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import static org.hamcrest.CoreMatchers.is;
-import org.junit.After;
-import org.junit.AfterClass;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

@@ -65,6 +65,7 @@ public class BreadRepresentation {
     
     /**
      * Methode permettant de mettre a jour un pain (methode HTTP: PUT)
+     * @param id
      * @id id du pain a modifier
      * @param bread pain a modifier
      * @param uriInfo informations sur l'URI
